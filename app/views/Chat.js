@@ -36,7 +36,6 @@ export default function Chat({ navigation, page, setPage }){
     const chat_window = useSelector((state) => state.chatReducer.value.chat_window) //Data for the purpose behind popup Window
     const isChat_window = useSelector((state) => state.chatReducer.value.isChat_window) //true or false
 
-    const inputRef = useRef();
     const [access, setAccess] = useState(false)
     const [stackView, setStackView] = useState('Index')
 

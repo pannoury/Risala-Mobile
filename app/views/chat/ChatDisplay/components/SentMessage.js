@@ -7,7 +7,6 @@ import { Video, AVPlaybackStatus } from 'expo-av';
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 import Files                from "./Files";
-import MessageMoreOptions   from "./MessageMoreOptions";
 import removeEmojis         from "../functions/removeEmojis";
 import messageStyler        from "../functions/messageStyler";
 
@@ -175,9 +174,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                 file={file ? `[${filePath.map(e => `"${e.path}"`)}]` : null}
                 title={timestamp}
             >
-                <Text className="message-time-stamp">
-                    {timestamp}
-                </Text>
+                <Text className="message-time-stamp">{timestamp}</Text>
                 {
                     reply === true ?
                     <View className="message-wrapper">
@@ -222,7 +219,6 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                                 return(
                                                     <Image 
                                                         source={{e}}
-                                                        style={style ? style : null}
                                                         key={e + 'reply'}
                                                         onClick={(() => { fileClick(e) })}
                                                     />
@@ -230,7 +226,6 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                             } else {
                                                 return(
                                                     <Video 
-                                                        style={style ? style : null}
                                                         key={e + 'replyu'}
                                                         onClick={(() => { fileClick(e) })}
                                                         source={{e}}
@@ -280,7 +275,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                 ((!file && !filePath && only_emoji !== "") || fileReply) &&
                                 <View 
                                     className="message" 
-                                    style={{backgroundColor: chat_settings.color, marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
+                                    //style={{backgroundColor: chat_settings.color, marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
                                 >
                                     {
                                         !url ?
@@ -302,10 +297,6 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
     function NotReply(){
         return(
             <View className="message-wrapper">
-                <MessageMoreOptions 
-                    sent={true}
-                    inputRef={inputRef}
-                />
                 {
                     (only_emoji === "" && value.text !== "") &&
                     <View className="message emoji">
@@ -326,7 +317,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                     <View 
                         className="message" 
                         onDoubleClick={doubleClick}
-                        style={{backgroundColor: chat_settings.color, borderRadius: styleMessageBuble()}}
+                        //style={{backgroundColor: chat_settings.color, borderRadius: styleMessageBuble()}}
                     >
                         {
                             !url ?

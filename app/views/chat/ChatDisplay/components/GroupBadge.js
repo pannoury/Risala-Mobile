@@ -1,6 +1,8 @@
 import React from "react";
+import { View, Text, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer } from "../../../../src/redux/chat";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 export default function GroupBadge({ locale }){
     const dispatch = useDispatch();
@@ -26,16 +28,12 @@ export default function GroupBadge({ locale }){
                 var string = `${sendername} created this group`
                 
                 return(
-                    <div className="group-badge-wrapper">
-                        <div className="group-figure">
-                            <figure>
-                                <img src={others[0].profile_picture ? `${others[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                            </figure>
-                            <figure>
-                                <img src={others[1].profile_picture ? `${others[1].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                            </figure>
-                        </div>
-                        <span className="group-name">
+                    <View className="group-badge-wrapper">
+                        <View className="group-figure">
+                            <Image source={{uri: others[0].profile_picture ? `${others[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                            <Image source={{uri: others[1].profile_picture ? `${others[1].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                        </View>
+                        <Text className="group-name">
                             {
                                 !current.alias &&
                                 others.map((e,i, row) => {
@@ -46,42 +44,42 @@ export default function GroupBadge({ locale }){
                                     }
                                 })
                             }
-                        </span>
+                        </Text>
                         {
                             current.alias &&
-                            <span className="group-name">{current.alias}</span>
+                            <Text className="group-name">{current.alias}</Text>
                         }
-                        <span className="creator">{string}</span>
-                        <div className="group-chat-settings">
-                            <div onClick={(() => {
+                        <Text className="creator">{string}</Text>
+                        <View className="group-chat-settings">
+                            <View onClick={(() => {
                                 dispatch(chatReducer({
                                     isChat_window: true,
                                     chat_window: { purpose: "add_member"},
                                 }))
                             })}>
-                                <i className="material-icons">person_add</i>
-                                <span>{locale === "en" ? "Add user" : "Lägg till"}</span>
-                            </div>
-                            <div onClick={(() => {
+                                <MaterialIcons name="person-add"/>
+                                <Text>{locale === "en" ? "Add user" : "Lägg till"}</Text>
+                            </View>
+                            <View onClick={(() => {
                                 dispatch(chatReducer({
                                     isChat_window: true,
                                     chat_window: { purpose: "change_name"},
                                 }))
                             })}>
-                                <i className="material-icons">edit</i>
-                                <span>{locale === "en" ? "Change name" : "Namn"}</span>
-                            </div>
-                            <div onClick={(() => {
+                                <MaterialIcons name="edit"/>
+                                <Text>{locale === "en" ? "Change name" : "Namn"}</Text>
+                            </View>
+                            <View onClick={(() => {
                                 dispatch(chatReducer({
                                     isChat_window: true,
                                     chat_window: { purpose: "view_members"},
                                 }))
                             })}>
-                                <i className="material-icons">groups</i>
-                                <span>{locale === "en" ? "Group members" : "Medlemmar"}</span>
-                            </div>
-                        </div>
-                    </div>
+                                <MaterialIcons name="groups"/>
+                                <Text>{locale === "en" ? "Group members" : "Medlemmar"}</Text>
+                            </View>
+                        </View>
+                    </View>
                 )
             } catch {
                 return null

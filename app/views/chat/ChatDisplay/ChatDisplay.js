@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { postRequest, errorManagement } from "../../../api/api";
 import { chatReducer } from "../../../src/redux/chat";
 import { timeStamp } from "../../../src/lib/timeStamp";
+import useLocale from "../../../src/lib/useLocale";
 
 // Components
 import RecievedMessage      from "./components/RecievedMessage";
@@ -14,16 +15,20 @@ import ArrowBottom          from "./components/ArrowBottom";
 import GroupBadge           from "./components/GroupBadge";
 import Typing               from "./components/Typing";
 import CallEvent            from "./components/CallEvent";
+import informationManager   from "../../../src/lib/informationManager";
 
 export default function ChatDisplay({}) {
     const dispatch = useDispatch();
+    const locale = useLocale();
     const newMessage = useSelector((state) => state.chatReducer.value.newMessage)
     const reply = useSelector((state) => state.chatReducer.value.reply)
     const COUNTER_DATA = useSelector((state) => state.chatReducer.value.COUNTER_DATA)
+    const USER_DATA = useSelector((state) => state.chatReducer.value.USER_DATA)
     const current = useSelector((state) => state.chatReducer.value.current)
     const chat = useSelector((state) => state.chatReducer.value.chat)
 
     const typingAudio = useRef()
+    const inputRef = useRef()
 
     const [height, setHeight] = useState();
     const [offset, setOffset] = useState(0)
@@ -121,7 +126,7 @@ export default function ChatDisplay({}) {
     }, [reply])
 
     function scrollDetect(e){
-        if(document.querySelector('.chat-list-wrapper')?.scrollTop === 0 && moreMessage && chatDisplayWindow.current.childElementCount >= 100 && !loading){
+        if(chatDisplayWindow?.scrollTop === 0 && moreMessage && chatDisplayWindow.current.childElementCount >= 100 && !loading){
             setChatLoading(true)
             postRequest('chat/chat', {
                 chat_id: current.id,
@@ -147,13 +152,14 @@ export default function ChatDisplay({}) {
     }
 
     return(
-        <View 
+        <SafeAreaView 
             className="chat-display"
-            style={{height: height}}
+            style={{height: '100%'}}
         >   
             <ScrollView 
                 ref={chatDisplayWindow}
                 current-id={current ? current.id : null}
+                style={{}}
             >
                 {
                     chatLoading &&
@@ -267,7 +273,9 @@ export default function ChatDisplay({}) {
                     chatDisplayWindow={chatDisplayWindow}
                 />
             </ScrollView>
-            <ArrowBottom/>
-        </View>
+            <ArrowBottom
+                chatDisplayWindow={chatDisplayWindow}
+            />
+        </SafeAreaView>
     )
 }

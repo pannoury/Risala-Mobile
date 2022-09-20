@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { View } from "react-native";
 import { useSelector } from "react-redux";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 
-export default function ArrowBottom(){
+export default function ArrowBottom({chatDisplayWindow}){
     const current = useSelector((state) => state.chatReducer.value.current)
     const reply = useSelector((state) => state.chatReducer.value.reply)
     const [arrowBotton, setArrowBotton] = useState(false)
@@ -10,19 +12,19 @@ export default function ArrowBottom(){
 
     useEffect(() => {
         setTimeout(() => {
-            document.querySelector('.chat-list-wrapper').addEventListener('scroll', isTypingScrollDetect)
+            chatDisplayWindow.current.addEventListener('scroll', isTypingScrollDetect)
         }, 500)
 
         return(() => {
             if(isListening){
-                document.querySelector('.chat-list-wrapper').removeEventListener('scroll', isTypingScrollDetect)
+                chatDisplayWindow.current.removeEventListener('scroll', isTypingScrollDetect)
             }
         })
     }, [current])
 
     function isTypingScrollDetect(e){
         setIsListening(true)
-        var chatList = document.querySelector('.chat-list-wrapper')
+        var chatList = chatDisplayWindow.current
         var position = chatList?.scrollTop / (chatList?.scrollHeight - chatList?.clientHeight)
 
         if(position < 0.9){
@@ -34,7 +36,7 @@ export default function ArrowBottom(){
 
     function arrowClick(){
         setArrowBotton(false)
-        var display = document.querySelector('.chat-list-wrapper')
+        var display = chatDisplayWindow.current
         display.scrollTop = display.scrollHeight
     }
 
@@ -42,12 +44,12 @@ export default function ArrowBottom(){
     const hideArrow = { display: 'none' }
 
     return(
-        <div 
+        <View 
             className="arrow-bottom-button"
             onClick={arrowClick}
             style={(arrowBotton && !reply.reply) ? displayArrow : hideArrow}
         >
-            <i className="material-icons">keyboard_arrow_down</i>
-        </div>
+            <MaterialIcons name="keyboard-arrow-down" color={"#fff"} size={26}/>
+        </View>
     )
 }

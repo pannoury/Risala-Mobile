@@ -2,6 +2,7 @@ import axios from "axios";
 import store from "../src/redux/store";
 import { chatReducer } from "../src/redux/chat";
 import { useDispatch } from "react-redux";
+import informationManager from "../src/lib/informationManager";
 
 export function postRequest(URL, payload, headers){
     return new Promise((resolve, reject) => {
@@ -44,10 +45,7 @@ export function errorManagement(payload){
     const MESSAGES = state.MESSAGES
 
     return new Promise((resolve, reject) => {
-        let url;
-        window.location.hostname === "localhost" ? 
-        url = `http://localhost:800/error` :
-        url = `https://risala.codenoury.se/api/error`
+        let url = `https://risala.codenoury.se/api/error`
     
         try {
             axios.post(url, {

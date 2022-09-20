@@ -1,7 +1,10 @@
 import React from "react";
 import { View, Text } from "react-native";
+import useLocale from "../../../../src/lib/useLocale";
 
 export default function TimeSeparator({value, current_id}){
+    const locale = useLocale();
+    
     var month_string = undefined;
     if(locale === "en"){
         switch (value.timestamp.substring(5,7)){
@@ -85,14 +88,12 @@ export default function TimeSeparator({value, current_id}){
 
     //Actual timeseparator
     return(
-        <>
-            <View 
-                className="separator" 
-                message_id={value.message_id} 
-                current-id={current_id}
-            >
-                <Text>{value.timestamp.substring(8,10) + ' ' + month_string}</Text>
-            </View>
-        </>
+        <View 
+            className="separator" 
+            message_id={value.message_id} 
+            current-id={current_id}
+        >
+            <Text>{value.timestamp.substring(8,10) + ' ' + month_string}</Text>
+        </View>
     )
 }

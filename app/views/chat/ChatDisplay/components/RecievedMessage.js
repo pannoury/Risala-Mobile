@@ -8,7 +8,6 @@ import { Video, AVPlaybackStatus } from 'expo-av';
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 import Files                from "./Files";
-import MessageMoreOptions   from "./MessageMoreOptions";
 import removeEmojis         from "../functions/removeEmojis";
 
 export default function RecievedMessage({index, value, optionSelect, timestamp, nickname, array, inputRef}){
@@ -210,15 +209,11 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
             >
                 {
                     (group && (!previousMatch && !nextMatch || previousMatch && !nextMatch)) &&
-                    <figure className="sent-profile-img">
-                        <img src={sender ? sender.profile_picture ? sender.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                    </figure>
+                    <Image source={{uri: sender ? sender.profile_picture ? sender.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                 }
                 {
                     (!group && ((!previousMatch && !nextMatch) || previousMatch && !nextMatch)) &&
-                    <figure className="sent-profile-img">
-                        <img src={COUNTER_DATA[0].profile_picture ? `${COUNTER_DATA[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                    </figure>
+                    <Image source={{uri: COUNTER_DATA[0].profile_picture ? `${COUNTER_DATA[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                 }
                 {
                     reply === true ?
@@ -262,7 +257,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                                 if(type === "image"){
                                                     return(
                                                         <Image 
-                                                            style={style ? style : null}
+                                                            //style={style ? style : null}
                                                             key={e + 'reply'}
                                                             onClick={(() => { fileClick(e) })}
                                                             source={{e}}
@@ -272,7 +267,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                                     return(
                                                         <Video 
                                                             source={{e}}
-                                                            style={style ? style : null}
+                                                            //style={style ? style : null}
                                                             key={e + 'reply'}
                                                             onClick={(() => { fileClick(e) })}
                                                         />
@@ -296,7 +291,10 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                 }
                                 {
                                     (file && filePath) &&
-                                    <View className="message file" style={{backgroundColor: chat_settings.color}}>
+                                    <View 
+                                        className="message file" 
+                                        //style={{backgroundColor: chat_settings.color}}
+                                    >
                                         <Files
                                             value={value}
                                             filePath={filePath}
@@ -321,7 +319,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                     ((!file && !filePath) || fileReply) &&
                                     <View 
                                         className="message"
-                                        style={{marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
+                                        //style={{marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
                                     >
                                         {
                                             !url ?
@@ -332,10 +330,6 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                     </View>
                                 }
                             </View>
-                            <MessageMoreOptions 
-                                inputRef={inputRef}
-                                sent={false}
-                            />
                         </View>
                     </View>
                     :
@@ -380,7 +374,10 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                     }
                     {
                         (only_emoji !== "" && !file && !filePath) &&
-                        <View className="message" style={{borderRadius: styleMessageBuble()}}>
+                        <View 
+                            className="message" 
+                            //style={{borderRadius: styleMessageBuble()}}
+                        >
                             {
                                 !url ?
                                 <Text>{`${value.text}`}</Text>
@@ -389,10 +386,6 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                             }
                         </View>
                     }
-                    <MessageMoreOptions 
-                        inputRef={inputRef} 
-                        sent={false}
-                    />
                 </View>
             </View>
         )

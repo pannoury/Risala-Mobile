@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { chatReducer, user_search_remove } from "../features/chat";
 import { callSettingReducer } from "../features/callSettings";
 import { postRequest, errorManagement } from "../api/api";
-import informationManager from "../modules/informationManager";
+import informationManager from "../../src/lib/informationManager";
 
 export default function  ChatTop({setWidth, socket}){
     const dispatch = useDispatch();

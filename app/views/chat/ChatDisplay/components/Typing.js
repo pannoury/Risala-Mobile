@@ -3,6 +3,8 @@ import { View } from "react-native";
 import { Audio } from 'expo-av';
 import { useDispatch, useSelector } from "react-redux";
 
+const sound = new Audio.Sound();
+
 export default function Typing({ typingAudio, chatDisplayWindow }) {
     const dispatch = useDispatch()
     const typing = useSelector((state) => state.chatReducer.value.typing)
@@ -36,6 +38,15 @@ export default function Typing({ typingAudio, chatDisplayWindow }) {
 
     }, [typing, current, match, newMessage])
 
+    useEffect(() => {
+        if(typing?.is_typing && match){
+           sound.loadAsync('https://risala.codenoury.se/assets/typing_sound.mp3')
+           sound.playAsync()
+        } else {
+            sound.unloadAsync()
+        }
+    }, [typing, match])
+
     return(
         match &&
         <>
@@ -48,12 +59,6 @@ export default function Typing({ typingAudio, chatDisplayWindow }) {
                 <View className="ddd"></View>
                 <View className="ccc"></View>
             </View>
-            <audio 
-                ref={typingAudio}
-                src='https://risala.codenoury.se/assets/typing_sound.mp3' 
-                autoPlay 
-                loop 
-            ></audio>
         </>
     )
 }

@@ -1,8 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { chatReducer } from "../../../../src/redux/chat";
 import removeEmojis from "../functions/removeEmojis";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 export default function CallEvent({ value, index, locale, array, USER_DATA, current }){
     const dispatch = useDispatch();
@@ -86,7 +87,7 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
     }
 
     return(
-        <li
+        <View
             id={value.message_id}
             className={value.sender_id === USER_DATA.account_id ? "sent-message call" : "recieved-message call"}
             title={value.timestamp}
@@ -97,11 +98,9 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
         >
             {
                 (!nextMatch && !isSender) &&
-                <figure className="sent-profile-img">
-                    <img src={counter.profile_picture ? counter.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                </figure>
+                <Image source={{uri: counter.profile_picture ? counter.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
             }
-            <div 
+            <View 
                 className="call-object-wrapper"
                 style={{marginLeft: (!nextMatch && !isSender) ? "0px" : null}}
             >
@@ -110,67 +109,67 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
                     <>
                         {
                             (infoObject.purpose === "call" && !isMissed) &&
-                            <div className="event-icon">
-                                <i className="material-icons">call_made</i>
-                                <i className="material-icons">call</i>
-                            </div>
+                            <View className="event-icon">
+                                <MaterialIcons name="call-made" />
+                                <MaterialIcons name="call" />
+                            </View>
                         }
                         {
                             (infoObject.purpose === "call" && isMissed) &&
-                            <div className="event-icon missed">
-                                <i className="material-icons">close</i>
-                                <i className="material-icons">call</i>
-                            </div>
+                            <View className="event-icon missed">
+                                <MaterialIcons name="close"/>
+                                <MaterialIcons name="call"/>
+                            </View>
                         }
                         {
                             (infoObject.purpose === "video" && !isMissed) &&
-                            <div className="event-icon video">
-                                <i className="material-icons">call_made</i>
-                                <i className="material-icons">videocam</i>
-                            </div>
+                            <View className="event-icon video">
+                                <MaterialIcons name="call_made"/>
+                                <MaterialIcons name="videocam"/>
+                            </View>
                         }
                         {
                             (infoObject.purpose === "video" && isMissed) &&
-                            <div className="event-icon video missed">
-                                <i className="material-icons">close</i>
-                                <i className="material-icons">videocam</i>
-                            </div>
+                            <View className="event-icon video missed">
+                                <MaterialIcons name="close" />
+                                <MaterialIcons name="videocam" />
+                            </View>
                         }
                     </>
                     :
                     <>
                         {
                             (infoObject.purpose === "call" && !isMissed) &&
-                            <div className="event-icon">
-                                <i className="material-icons">call_received</i>
-                                <i className="material-icons">call</i>
-                            </div>
+                            <View className="event-icon">
+                                <MaterialIcons name="call-received" />
+                                <MaterialIcons name="call" />
+                            </View>
                         }
                         {
                             (infoObject.purpose === "call" && isMissed) &&
-                            <div className="event-icon missed">
-                                <i className="material-icons">close</i>
-                                <i className="material-icons">call</i>
-                            </div>
+                            <View className="event-icon missed">
+                                <MaterialIcons name="close" />
+                                <MaterialIcons name="call" />
+                            </View>
                         }
                         {
                             (infoObject.purpose === "video" && !isMissed) &&
-                            <div className="event-icon video">
-                                <i className="material-icons">call_received</i>
-                                <i className="material-icons">videocam</i>
-                            </div>
+                            <View className="event-icon video">
+                                <MaterialIcons name="call-received" />
+                                <MaterialIcons name="videocam" />
+                            </View>
                         }
                         {
                             (infoObject.purpose === "video" && isMissed) &&
-                            <div className="event-icon video missed">
-                                <i className="material-icons">close</i>
-                                <i className="material-icons">videocam</i>
-                            </div>
+                            <View className="event-icon video missed">
+                                <MaterialIcons name="close" />
+                                <MaterialIcons name="videocam" />
+                            </View>
                         }
                     </>
                 }
-                <div className="event-info">
-                    <span>
+                <View className="event-info">
+                    <Text>
                         {
                             (infoObject.purpose === "call" && !isMissed) &&
                             "Audio call"
@@ -183,8 +182,8 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
                             infoObject.isMissed &&
                             "Missed call"
                         }
-                    </span>
-                    <span>
+                    </Text>
+                    <Text>
                         {
                             infoObject.isMissed &&
                             value.timestamp.substring(11,16)
@@ -197,9 +196,9 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
                             (infoObject.time === "" && !infoObject.isMissed)&&
                             value.timestamp.substring(11,16)
                         }
-                    </span>
-                </div>
-            </div>
-        </li>
+                    </Text>
+                </View>
+            </View>
+        </View>
     )
 }
