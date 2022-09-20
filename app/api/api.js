@@ -1,14 +1,11 @@
 import axios from "axios";
-import store from "../features/store";
-import { chatReducer } from "../features/chat";
+import store from "../src/redux/store";
+import { chatReducer } from "../src/redux/chat";
 import { useDispatch } from "react-redux";
 
 export function postRequest(URL, payload, headers){
     return new Promise((resolve, reject) => {
-        let url;
-        window.location.hostname === "localhost" ? 
-        url = `http://localhost:800/${URL}` :
-        url = `https://risala.codenoury.se/api/${URL}`
+        let url = `https://risala.codenoury.se/api/${URL}`
 
         axios.post(url, payload, headers)
         .then((response) => {
@@ -26,10 +23,7 @@ export function postRequest(URL, payload, headers){
 
 export function getRequest(URL){
     return new Promise((resolve, reject) => {
-        let url;
-        window.location.hostname === "localhost" ? 
-        url = `http://localhost:800/${URL}` :
-        url = `https://risala.codenoury.se/api/${URL}`
+        let url = `https://risala.codenoury.se/api/${URL}`
 
         axios(URL)
         .then((response) => {

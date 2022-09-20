@@ -1,36 +1,90 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Provider } from 'react-redux'
-import store from './features/store';
-import { SocketContext, SocketProvider } from './components/Socket';
-import { useContext } from 'react';
-import { useEffect } from 'react';
-import { AsyncStorageStatic } from 'react-native';
+import React, {useEffect, useState, userContext} from 'react';
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View, Image } from 'react-native';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { SocketContext, SocketProvider } from './src/lib/Socket';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { getStorage } from './src/lib/asyncStorage';
+import { postRequest } from './api/api';
+import store from './src/redux/store';
+import { chatReducer } from './src/redux/chat';
 
-export default function App() {
-  const socket = useContext(SocketContext)
+// Views
+import Login  from './views/Login';
+import Chat   from './views/Chat';
+
+
+// eslint-disable-next-line prettier/prettier
+export default function App({ }){
+  const [page, setPage] = useState('Home');
 
   useEffect(() => {
-    console.log("Hello!")
+    setTimeout(() => {
+      getStorage('user')
+      .then((response) => {
+        if(response){
+          setPage('Chat')
+        } else {
+          setPage('Login')
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    }, 400);
   }, [])
+
+  useEffect(() => {
+    console.log(page)
+  }, [page])
 
   return (
     <Provider store={store}>
       <SocketProvider>
-        <View style={styles.container}>
-          <Text>Welcome to Risala!</Text>
-          <StatusBar style="auto" />
-        </View>
+        <SafeAreaProvider>
+          <StatusBar
+            backgroundColor="#000"
+            barStyle={'light-content'}
+          />
+          {
+            page === "Chat" &&
+            <Chat 
+              page={page}
+              setPage={setPage}
+            />
+          }
+          {
+            page === "Login" &&
+            <Login 
+              page={page}
+              setPage={setPage}
+            />
+          }
+          {
+            page === "Home" &&
+            <Home/>
+          }
+        </SafeAreaProvider>
       </SocketProvider>
     </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function Home(){
+  const style = StyleSheet.create({
+    image: {
+      width: 200,
+      height: 50,
+      resizeMode: 'contain',
+      margin: 'auto'
+    }
+  })
+
+  return(
+    <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000'}}>
+      <Image
+        style={style.image}
+        source={require('./assets/logo-long-yellow.png')}
+      ></Image>
+    </SafeAreaView>
+  )
+}

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 /******************* Redux States *******************/
-import chatSlice            from '../features/chat';
+import chatSlice            from './chat';
 import callSettingsSlice    from './callSettings';
 /****************************************************/
 
