@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { View, Text } from "react-native";
 import { chatReducer } from "../../../../src/redux/chat";
 import removeEmojis from "../functions/removeEmojis";
 

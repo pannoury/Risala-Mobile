@@ -1,8 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { View, Text, Image } from "react-native";
 import { chatReducer } from "../../../../src/redux/chat";
 import isUrl from 'is-url'
 import messageStyler from "../functions/messageStyler";
+import { Video, AVPlaybackStatus } from 'expo-av';
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 import Files                from "./Files";
 import MessageMoreOptions   from "./MessageMoreOptions";
@@ -195,7 +198,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
 
     return(
         <>
-            <li
+            <View
                 id={value.message_id}
                 className={reply === true ? `recieved-message reply ${nextMatch ? 'NXTSM' : ''}` : nextMatch ? "recieved-message NXTSM" : "recieved-message"}
                 message_id={value.message_id}
@@ -219,30 +222,20 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                 }
                 {
                     reply === true ?
-                    <div className="recieved-message-wrapper">
-                        <div className="message-wrapper">
-                            <div className="reply-wrapper">
-                                <a 
+                    <View className="recieved-message-wrapper">
+                        <View className="message-wrapper">
+                            <View className="reply-wrapper">
+                                <View 
                                     className="reply-from"
                                     message_id={value.reply_to_message_id}
                                     onClick={(() => { scrollToReply(value.reply_to_message_id) })}
                                 >
-                                    <svg  x="0px" y="0px" width="48.8px" height="46.3px" viewBox="0 0 48.8 46.3">
-                                        <path d="M17.4,24.1c0,0.2,0,0.3,0,0.5c0,2.3,0,4.6,0,6.8c0,1.2-0.9,2-2,1.9c-0.4-0.1-0.8-0.3-1.1-0.6
-                                        	c-1.6-1.7-3.2-3.4-4.8-5.1c-3-3.2-5.9-6.3-8.9-9.5c-0.6-0.6-0.8-1.3-0.5-2.1c0.1-0.3,0.3-0.5,0.5-0.7c4.6-4.9,9.2-9.8,13.8-14.6
-                                        	c0.6-0.6,1.3-0.8,2-0.5c0.7,0.4,1.1,1,1.1,1.8c0,2.3,0,4.6,0,6.8c0,0.1,0,0.3,0,0.4c0.1,0,0.3,0,0.4,0c3,0,5.9,0,8.9,0.1
-                                        	c3.4,0.1,6.8,0.7,10.1,1.8c2.7,1,5.2,2.3,7.2,4.5c2.1,2.2,3.4,4.9,4,7.9c0.5,2.5,0.7,5,0.7,7.5c-0.1,2.1-0.5,4.1-1.1,6
-                                        	c-0.8,2.8-1.9,5.4-3,8c-0.1,0.3-0.3,0.5-0.4,0.7c-0.3,0.4-0.6,0.5-1,0.3c-0.3-0.1-0.6-0.5-0.6-0.9c0-0.6,0.1-1.1,0.1-1.7
-                                        	c0.2-3,0.2-6-0.5-9c-0.5-2.1-1.2-4.1-2.7-5.8c-1.8-1.9-3.9-3.1-6.4-3.8c-2.1-0.5-4.2-0.9-6.4-0.9c-3.1-0.1-6.1-0.1-9.2-0.1
-                                        	C17.6,24.1,17.6,24.1,17.4,24.1z"/>
-                                    </svg>
-                                    <span>
-                                        {replied_text}
-                                    </span>
-                                </a>
+                                    <FontAwesome name="reply" color={"#fff"} size={24}/>
+                                    <Text>{replied_text}</Text>
+                                </View>
                                 {
                                     isMedia && value.reply_text &&
-                                    <div className="reply-chat-bubble media">
+                                    <View className="reply-chat-bubble media">
                                         {
                                             isMedia.map((e, i) => {
 
@@ -268,32 +261,30 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
 
                                                 if(type === "image"){
                                                     return(
-                                                        <figure 
+                                                        <Image 
                                                             style={style ? style : null}
                                                             key={e + 'reply'}
                                                             onClick={(() => { fileClick(e) })}
-                                                        >
-                                                            <img src={e}/>
-                                                        </figure>
+                                                            source={{e}}
+                                                        />
                                                     )
                                                 } else {
                                                     return(
-                                                        <figure 
+                                                        <Video 
+                                                            source={{e}}
                                                             style={style ? style : null}
                                                             key={e + 'reply'}
                                                             onClick={(() => { fileClick(e) })}
-                                                        >
-                                                            <video src={e} controls/>
-                                                        </figure>
+                                                        />
                                                     )
                                                 }
                                             })
                                         }
-                                    </div>
+                                    </View>
                                 }
                                 {
                                     fileReply &&
-                                    <div>
+                                    <View>
                                         <Files 
                                             value={value}
                                             filePath={filePath}
@@ -301,82 +292,82 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                             fileReply={true}
                                             key={value.message_id + 'file'}
                                         />
-                                    </div>
+                                    </View>
                                 }
                                 {
                                     (file && filePath) &&
-                                    <div className="message file" style={{backgroundColor: chat_settings.color}}>
+                                    <View className="message file" style={{backgroundColor: chat_settings.color}}>
                                         <Files
                                             value={value}
                                             filePath={filePath}
                                             recieved={false}
                                             key={value.message_id + 'file'}
                                         />
-                                    </div>
+                                    </View>
                                 }
                                 {
                                     !isMedia && value.reply_text && !fileReply &&
-                                    <div className="reply-chat-bubble">
-                                        {value.reply_text}
-                                    </div>
+                                    <View className="reply-chat-bubble">
+                                        <Text>{value.reply_text}</Text>
+                                    </View>
                                 }
                                 {
                                     (only_emoji === "" && value.text !== "") &&
-                                    <div className="message emoji">
-                                        {value.text}
-                                    </div>
+                                    <View className="message emoji">
+                                        <Text>{value.text}</Text>
+                                    </View>
                                 }
                                 {
                                     ((!file && !filePath) || fileReply) &&
-                                    <div 
+                                    <View 
                                         className="message"
                                         style={{marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
                                     >
                                         {
                                             !url ?
-                                            `${value.text}`
+                                            <Text>{`${value.text}`}</Text>
                                             :
-                                            <a href={value.text} target="_blank">{value.text}</a>
+                                            <Text href={value.text} target="_blank">{value.text}</Text>
                                         }
-                                    </div>
+                                    </View>
                                 }
-                            </div>
+                            </View>
                             <MessageMoreOptions 
                                 inputRef={inputRef}
                                 sent={false}
                             />
-                        </div>
-                    </div>
+                        </View>
+                    </View>
                     :
                     <NotReply/>
                 }
-                <span className="message-time-stamp">
+                <Text className="message-time-stamp">
                     {timestamp}
-                </span>
-            </li>
+                </Text>
+            </View>
         </>
     )
 
     function NotReply(){
         return(
-            <div className="recieved-message-wrapper">
+            <View className="recieved-message-wrapper">
                 {
                     (sender && group && !previousMatch) &&
                     <>
                         {
                             userNickname ?
-                            <span className="sender-name">{userNickname}</span>
+                            <Text className="sender-name">{userNickname}</Text>
                             :
-                            <span className="sender-name">{sender.firstname}</span>
+                            <Text className="sender-name">{sender.firstname}</Text>
                         }
                     </>
                 }
-                <div className="message-wrapper">
+                <View className="message-wrapper">
                     {
                         (only_emoji === "" && value.text !== "") &&
-                        <div className="message emoji">
-                            {value.text}
-                        </div>
+                        <View className="message emoji">
+                            <Text>{value.text}</Text>
+                        </View>
                     }
                     {
                         (file && filePath) &&
@@ -389,21 +380,21 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                     }
                     {
                         (only_emoji !== "" && !file && !filePath) &&
-                        <div className="message" style={{borderRadius: styleMessageBuble()}}>
+                        <View className="message" style={{borderRadius: styleMessageBuble()}}>
                             {
                                 !url ?
-                                `${value.text}`
+                                <Text>{`${value.text}`}</Text>
                                 :
-                                <a href={value.text} target="_blank">{value.text}</a>
+                                <Text href={value.text} target="_blank">{value.text}</Text>
                             }
-                        </div>
+                        </View>
                     }
                     <MessageMoreOptions 
                         inputRef={inputRef} 
                         sent={false}
                     />
-                </div>
-            </div>
+                </View>
+            </View>
         )
     }
 }

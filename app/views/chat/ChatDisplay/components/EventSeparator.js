@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { View, Text } from "react-native";
 
 export default function EventSeparator({ value, index, locale }){
     const USER_DATA = useSelector((state) => state.chatReducer.value.USER_DATA)
@@ -42,14 +43,16 @@ export default function EventSeparator({ value, index, locale }){
         } else if(value.text === "Admin") {
             return (
                 <>
-                    <li className="separator change" message_id={value.message_id}>
+                    <View className="separator change" message_id={value.message_id}>
+                        <Text>
                         {
                             locale === "en" ?
                             `${value.reciever_id} is now the admin of the group`
                             :
                             `${value.reciever_id} är nu gruppadministratör`
                         }
-                    </li>
+                        </Text>
+                    </View>
                 </>
             )
         } else if (value.text === "Removed"){
@@ -65,14 +68,16 @@ export default function EventSeparator({ value, index, locale }){
             }
             return (
                 <>
-                    <li className="separator change" message_id={value.message_id}>
+                    <View className="separator change" message_id={value.message_id}>
+                        <Text>
                         {
                             locale === "en" ?
                             `${changer} removed ${value.reciever_id} from the group`
                             :
                             `${changer} har gett ${value.reciever_id} smeknamnet ${nickname}`
                         }
-                    </li>
+                        </Text>
+                    </View>
                 </>
             )
         } else if (value.text === "Added"){
@@ -93,17 +98,19 @@ export default function EventSeparator({ value, index, locale }){
 
             return (
                 <>
-                    <li 
+                    <View 
                         className="separator change" 
                         message_id={value.message_id}  
                     >
+                        <Text>
                         {
                             locale === "en" ?
                             `${changer} added ${reciever} to the group`
                             :
                             `${changer} har gett ${reciever} smeknamnet ${nickname}`
                         }
-                    </li>
+                        </Text>
+                    </View>
                 </>
             )
         } else if (value.reciever_id === current.id) {
@@ -117,17 +124,19 @@ export default function EventSeparator({ value, index, locale }){
 
             return (
                 <>
-                    <li 
+                    <View 
                         className="separator change" 
                         message_id={value.message_id}
                     >
+                        <Text>
                         {
                             locale === "en" ?
                             `${changer} changed the group name to ${value.text}`
                             :
                             `${changer} ändrade gruppnamnet till ${value.text}`
                         }
-                    </li>
+                        </Text>
+                    </View>
                 </>
             )
 
@@ -149,17 +158,19 @@ export default function EventSeparator({ value, index, locale }){
         
             return (
                 <>
-                    <li 
+                    <View 
                         className="separator change" 
                         message_id={value.message_id}
                     >
+                        <Text>
                         {
                             locale === "en" ?
                             `${changer} have given ${originalName} the nickname ${nickname}`
                             :
                             `${changer} har gett ${originalName} smeknamnet ${nickname}`
                         }
-                    </li>
+                        </Text>
+                    </View>
                 </>
             )
         }
@@ -173,20 +184,20 @@ export default function EventSeparator({ value, index, locale }){
         
         return (
             <>
-                <li 
+                <View 
                     className="separator change" 
                     message_id={value.message_id}
                 >
-                    <span>
+                    <Text>
                     {
                         locale === "en" ?
                         `${changer} has changed the theme to`
                         :
                         `${changer} har ändrat färgtemat till`
                     }
-                    </span>
-                    <div className="color-palette" style={{backgroundColor: `${value.text}`}}></div>
-                </li>
+                    </Text>
+                    <View className="color-palette" style={{backgroundColor: `${value.text}`}}></View>
+                </View>
             </>
         )
     } else {

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import { Audio } from 'expo-av';
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Typing({ typingAudio, chatDisplayWindow }) {
@@ -37,15 +39,15 @@ export default function Typing({ typingAudio, chatDisplayWindow }) {
     return(
         match &&
         <>
-            <div className="typing-window">
-                <div className="typing-bubble">
-                    <div className="bubble"></div>
-                    <div className="bubble"></div>
-                    <div className="bubble"></div>
-                </div>
-                <div className="ddd"></div>
-                <div className="ccc"></div>
-            </div>
+            <View className="typing-window">
+                <View className="typing-bubble">
+                    <View className="bubble"></View>
+                    <View className="bubble"></View>
+                    <View className="bubble"></View>
+                </View>
+                <View className="ddd"></View>
+                <View className="ccc"></View>
+            </View>
             <audio 
                 ref={typingAudio}
                 src='https://risala.codenoury.se/assets/typing_sound.mp3' 

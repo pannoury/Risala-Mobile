@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { chatReducer } from "../../../../src/redux/chat";
 import isUrl from 'is-url'
+import { Video, AVPlaybackStatus } from 'expo-av';
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 import Files                from "./Files";
@@ -180,24 +181,18 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                 {
                     reply === true ?
                     <View className="message-wrapper">
-                        <MessageMoreOptions 
-                            sent={true} 
-                            inputRef={inputRef} 
-                        />
                         <View className="reply-wrapper">
-                            <a 
+                            <View 
                                 className="reply-from"
                                 message_id={value.reply_to_message_id}
                                 onClick={(() => { scrollToReply(value.reply_to_message_id) })}
                             >
                                 <FontAwesome name="reply" color={"#fff"} size={24}/>
-                                <Text>
-                                    {replied_text}
-                                </Text>
-                            </a>
+                                <Text>{replied_text}</Text>
+                            </View>
                             {
                                 isMedia && value.reply_text &&
-                                <div className="reply-chat-bubble media">
+                                <View className="reply-chat-bubble media">
                                     {
                                         isMedia.map((e, i) => {
 
@@ -225,38 +220,36 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
 
                                             if(type === "image"){
                                                 return(
-                                                    <figure 
+                                                    <Image 
+                                                        source={{e}}
                                                         style={style ? style : null}
                                                         key={e + 'reply'}
                                                         onClick={(() => { fileClick(e) })}
-                                                    >
-                                                        <img src={e}/>
-                                                    </figure>
+                                                    />
                                                 )
                                             } else {
                                                 return(
-                                                    <figure 
+                                                    <Video 
                                                         style={style ? style : null}
                                                         key={e + 'replyu'}
                                                         onClick={(() => { fileClick(e) })}
-                                                    >
-                                                        <video src={e} controls/>
-                                                    </figure>
+                                                        source={{e}}
+                                                    />
                                                 )
                                             }
                                         })
                                     }
-                                </div>
+                                </View>
                             }
                             {
                                 !isMedia && value.reply_text && !fileReply &&
-                                <div className="reply-chat-bubble">
-                                    {value.reply_text}
-                                </div>
+                                <View className="reply-chat-bubble">
+                                    <Text>{value.reply_text}</Text>
+                                </View>
                             }
                             {
                                 fileReply &&
-                                <div>
+                                <View>
                                     <Files 
                                         value={value}
                                         filePath={filePath}
@@ -264,38 +257,38 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                         fileReply={true}
                                         key={value.message_id + 'file'}
                                     />
-                                </div>
+                                </View>
                             }
                             { /******** Has the sender only sent emojis? ************/
                                 (only_emoji === "" && value.text !== "") &&
-                                <div className="message emoji">
-                                    {value.text}
-                                </div>
+                                <View className="message emoji">
+                                    <Text>{value.text}</Text>
+                                </View>
                             }
                             {
                                 (file && filePath) &&
-                                <div className="message file" style={{backgroundColor: chat_settings.color}}>
+                                <View className="message file" style={{backgroundColor: chat_settings.color}}>
                                     <Files
                                         value={value}
                                         filePath={filePath}
                                         recieved={false}
                                         key={value.message_id + 'file'}
                                     />
-                                </div>
+                                </View>
                             }
                             {
                                 ((!file && !filePath && only_emoji !== "") || fileReply) &&
-                                <div 
+                                <View 
                                     className="message" 
                                     style={{backgroundColor: chat_settings.color, marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
                                 >
                                     {
                                         !url ?
-                                        `${value.text}`
+                                        <Text>{`${value.text}`}</Text>
                                         :
-                                        <a href={value.text} target="_blank">{value.text}</a>
+                                        <Text href={value.text} target="_blank">{value.text}</Text>
                                     }
-                                </div>
+                                </View>
                             } 
                         </View>
                     </View>
@@ -316,7 +309,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                 {
                     (only_emoji === "" && value.text !== "") &&
                     <View className="message emoji">
-                        {value.text}
+                        <Text>{value.text}</Text>
                     </View>
                 }
                 {
@@ -337,9 +330,9 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                     >
                         {
                             !url ?
-                            `${value.text}`
+                            <Text>{`${value.text}`}</Text>
                             :
-                            <a href={value.text} target="_blank">{value.text}</a>
+                            <Text href={value.text} target="_blank">{value.text}</Text>
                         }
                     </View>
                 }

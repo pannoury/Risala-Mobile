@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 
 export default function TimeSeparator({value, current_id}){
     var month_string = undefined;
@@ -91,7 +91,7 @@ export default function TimeSeparator({value, current_id}){
                 message_id={value.message_id} 
                 current-id={current_id}
             >
-                {value.timestamp.substring(8,10) + ' ' + month_string}
+                <Text>{value.timestamp.substring(8,10) + ' ' + month_string}</Text>
             </View>
         </>
     )

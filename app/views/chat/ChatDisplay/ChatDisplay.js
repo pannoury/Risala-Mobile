@@ -13,7 +13,6 @@ import EventSeparator       from "./components/EventSeparator";
 import ArrowBottom          from "./components/ArrowBottom";
 import GroupBadge           from "./components/GroupBadge";
 import Typing               from "./components/Typing";
-import OptionsWindow        from "./components/OptionsWindow";
 import CallEvent            from "./components/CallEvent";
 
 export default function ChatDisplay({}) {

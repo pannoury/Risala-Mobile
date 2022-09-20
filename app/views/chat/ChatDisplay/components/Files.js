@@ -1,4 +1,5 @@
 import React from "react";
+import { View, Text, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer } from "../../../../src/redux/chat";
 import fileSizeFormatter from '../../../../src/lib/fileSizeFormatter'
@@ -50,25 +51,23 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                 if(window.location.hostname === "localhost"){
                                     return(
                                         <>
-                                            <figure 
+                                            <Image 
                                                 key={value.path + index + 'not-reply'}
                                                 onClick={(() => { fileClick(value.path) })}
                                                 style={style}
-                                            >
-                                                <img src={`../${value.path.substring(3)}`}/>
-                                            </figure>
+                                                source={{uri: `../${value.path.substring(3)}`}}
+                                            />
                                         </>
                                     )
                                 } else {
                                     return(
                                         <>
-                                            <figure 
+                                            <Image 
                                                 key={value.path + index + 'not-reply'} 
                                                 style={style}
                                                 onClick={(() => { fileClick(value.path) })}
-                                            >
-                                                <img src={`https://risala.codenoury.se/${value.path.substring(3)}`}/>
-                                            </figure>
+                                                source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
+                                            />
                                         </>
                                     )
                                 }
@@ -109,7 +108,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                             if(window.location.hostname === "localhost"){
                                 return(
                                     <>
-                                        <a 
+                                        <View 
                                             className="file-wrapper" 
                                             href={`../${value.path.substring(3)}`} 
                                             target="_blank" 
@@ -118,17 +117,17 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path + index + 'not-reply'} 
                                         >
                                             <i className="material-icons">description</i>
-                                            <div className="file-description">
-                                                <span>{value.path.substring(21)}</span>
-                                                <span>{fileSize}</span>
-                                            </div>
-                                        </a>
+                                            <View className="file-description">
+                                                <Text>{value.path.substring(21)}</Text>
+                                                <Text>{fileSize}</Text>
+                                            </View>
+                                        </View>
                                     </>
                                 )
                             } else{
                                 return(
                                     <>
-                                        <a 
+                                        <View 
                                             className="file-wrapper" 
                                             href={`https://risala.codenoury.se/${value.path.substring(3)}`} 
                                             target="_blank" rel="noopener noreferrer" 
@@ -136,11 +135,11 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path + index + 'not-reply'} 
                                         >
                                             <i className="material-icons">description</i>
-                                            <div className="file-description">
-                                                <span>{value.path.substring(21)}</span>
-                                                <span>{fileSize}</span>
-                                            </div>
-                                        </a>
+                                            <View className="file-description">
+                                                <Text>{value.path.substring(21)}</Text>
+                                                <Text>{fileSize}</Text>
+                                            </View>
+                                        </View>
                                     </>
                                 )
                             }
@@ -160,7 +159,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                         return(
                             fileObject &&
                             <>
-                                <a 
+                                <View
                                     className="file-wrapper" 
                                     href={`https://risala.codenoury.se/${fileObject.path.substring(3)}`} 
                                     target="_blank" rel="noopener noreferrer" 
@@ -168,11 +167,11 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                     key={fileObject.path + 'file-reply'}
                                 >
                                     <i className="material-icons">description</i>
-                                    <div className="file-description">
-                                        <span>{fileObject.path.substring(21)}</span>
-                                        <span>{fileSize}</span>
-                                    </div>
-                                </a>
+                                    <View className="file-description">
+                                        <Text>{fileObject.path.substring(21)}</Text>
+                                        <Text>{fileSize}</Text>
+                                    </View>
+                                </View>
                             </>
                         )
                     })
@@ -181,8 +180,8 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
         )
     } else {
         return(
-            <div className="file-message">
-                <div className="files">
+            <View className="file-message">
+                <View className="files">
                 {
                     (!fileReply && filePath) &&
                     filePath.map((value, index) => {
@@ -208,25 +207,23 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                 if(window.location.hostname === "localhost"){
                                     return(
                                         <>
-                                            <figure 
+                                            <Image 
                                                 key={value.path} 
                                                 onClick={(() => { fileClick(value.path) })}
                                                 style={style}
-                                            >
-                                                <img src={`../${value.path.substring(3)}`}/>
-                                            </figure>
+                                                source={{uri: `../${value.path.substring(3)}`}}
+                                            />
                                         </>
                                     )
                                 } else {
                                     return(
                                         <>
-                                            <figure 
+                                            <Image 
                                                 key={value.path} 
                                                 onClick={(() => { fileClick(value.path) })}
                                                 style={style}
-                                            >
-                                                <img src={`https://risala.codenoury.se/${value.path.substring(3)}`}/>
-                                            </figure>
+                                                source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
+                                            />
                                         </>
                                     )
                                 }
@@ -266,7 +263,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                             if(window.location.hostname === "localhost"){
                                 return(
                                     <>
-                                        <a 
+                                        <View 
                                             className="file-wrapper" 
                                             href={`../${value.path.substring(3)}`} 
                                             target="_blank" 
@@ -275,17 +272,17 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path}
                                         >
                                             <i className="material-icons">description</i>
-                                            <div className="file-description">
-                                                <span>{value.path.substring(21)}</span>
-                                                <span>{fileSize}</span>
-                                            </div>
-                                        </a>
+                                            <View className="file-description">
+                                                <Text>{value.path.substring(21)}</Text>
+                                                <Text>{fileSize}</Text>
+                                            </View>
+                                        </View>
                                     </>
                                 )
                             } else{
                                 return(
                                     <>
-                                        <a 
+                                        <View 
                                             className="file-wrapper" 
                                             href={`https://risala.codenoury.se/${value.path.substring(3)}`} 
                                             target="_blank" rel="noopener noreferrer" 
@@ -293,11 +290,11 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path}
                                         >
                                             <i className="material-icons">description</i>
-                                            <div className="file-description">
-                                                <span>{value.path.substring(21)}</span>
-                                                <span>{fileSize}</span>
-                                            </div>
-                                        </a>
+                                            <View className="file-description">
+                                                <Text>{value.path.substring(21)}</Text>
+                                                <Text>{fileSize}</Text>
+                                            </View>
+                                        </View>
                                     </>
                                 )
                             }
@@ -319,7 +316,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                         return(
                             fileObject &&
                             <>
-                                <a 
+                                <View 
                                     className="file-wrapper" 
                                     href={`https://risala.codenoury.se/${fileObject.path.substring(3)}`} 
                                     target="_blank" rel="noopener noreferrer" 
@@ -327,23 +324,23 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                     key={fileObject.path}
                                 >
                                     <i className="material-icons">description</i>
-                                    <div className="file-description">
-                                        <span>{fileObject.path.substring(21)}</span>
-                                        <span>{fileSize}</span>
-                                    </div>
-                                </a>
+                                    <View className="file-description">
+                                        <Text>{fileObject.path.substring(21)}</Text>
+                                        <Text>{fileSize}</Text>
+                                    </View>
+                                </View>
                             </>
                         )
                     })
                 }
-                </div>
+                </View>
                 {
                     !fileReply &&
-                    <div className="message" style={!recieved ? {backgroundColor: chat_settings.color} : null}>
-                        {value.text}
-                    </div>
+                    <View className="message" style={!recieved ? {backgroundColor: chat_settings.color} : null}>
+                        <Text>{value.text}</Text>
+                    </View>
                 }
-            </div>
+            </View>
         )
     }
 }

@@ -106,21 +106,6 @@ export default function ChatSideMenu({ navigation }){
     function conversationSelect(chat_id){
         console.log(chat_id)
         if(chats.length >= 2 && current.id !== chat_id){
-            //var selected = e.currentTarget.getAttribute('data_selected')
-            //var x = document.querySelectorAll('[data_selected="true"]')
-        
-            if(x.length > 0){
-                x.forEach((e) => {
-                    //e.setAttribute('data_selected', 'false')
-                })
-            }
-        
-            if(selected === "false"){
-                //e.currentTarget.setAttribute('data_selected', 'true')
-            } else {
-                //e.currentTarget.setAttribute('data_selected', 'false')
-            }
-            
             dispatch(chatReducer({current: chats.find(e => e.id === chat_id)}))
         } else if(chats.length >= 1 && !current){ //this is when your first conversation was initated by someone else
             dispatch(chatReducer({current: chats.find(e => e.id === chat_id)}))
