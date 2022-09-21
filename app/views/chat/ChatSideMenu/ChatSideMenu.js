@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, SafeAreaView, Image, StatusBar } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, SafeAreaView, Image, StatusBar, Pressable, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer, arrayEmptyu } from "../../../src/redux/chat";
 import Conversations from "./components/Conversations";
@@ -13,7 +13,9 @@ import Entypo from '@expo/vector-icons/Entypo';
 
 
 // Components
-import TempChats from "./components/TempChats";
+import TempChats    from "./components/TempChats";
+import UserModal    from "../ChatTop/UserModal";
+import NewMessageModal from "../ChatTop/NewMessageModal";
 
 export default function ChatSideMenu({ navigation }){
     const dispatch = useDispatch();
@@ -27,6 +29,7 @@ export default function ChatSideMenu({ navigation }){
 
     const [tempChats, setTempChats] = useState(undefined) //Temp chat are chats which you have searched
     const [loading, setLoading] = useState(true)
+    const [userSettings, setUserSettings] = useState(false)
 
     //Retrives conversation based on current
     //Current is an object, and id is used to retrieve conversation data
@@ -111,7 +114,7 @@ export default function ChatSideMenu({ navigation }){
             dispatch(chatReducer({current: chats.find(e => e.id === chat_id)}))
         }
 
-        navigation.navigate('Display')
+        navigation.push('Display')
     }
 
     // Build some sort of algorithm
@@ -142,50 +145,68 @@ export default function ChatSideMenu({ navigation }){
         }
     }
 
-    //navigation.push('Profile', { owner: 'Michaś' });
+    function newMessageInit(){
+        dispatch(chatReducer({
+            newMessage: {
+                is_searching: true,
+                new_conversation: true
+            }
+        }))
+    }
 
     return(
         <SafeAreaView style={{backgroundColor: '#000', height: '100%', flex: 1}}>
-            <View style={style.viewTop}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '90%', marginBottom: 10}}>
-                    <Image 
-                        style={{width: 30, height: 30, borderRadius: 15}}
-                        source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
-                    />
-                    <Text style={{color: "#fff", fontSize: 26, fontWeight: '600'}}>Chats</Text>
-                    <Entypo name="new-message" size={24} color="#fff" />
-                </View>
-                <View style={{width: '100%', alignItems: 'center'}}>
-                    <TextInput
-                        placeholder="Search"
-                        onChange={conversationSearch}
-                        autoComplete="off"
-                        type="text" 
-                        style={style.textInput}
-                    />
-                </View>
-            </View>
-            <ScrollView>
-                {
-                    newMessage.is_searching &&
-                    <View>
+            <View>
+                <View style={style.viewTop}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '90%', marginBottom: 10}}>
+                        <Pressable onPress={(() => { setUserSettings(!userSettings) })}>
+                            <Image 
+                                style={{width: 30, height: 30, bo1rderRadius: 15}}
+                                source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                            />
+                        </Pressable>
+                        <Text style={{color: "#fff", fontSize: 26, fontWeight: '600'}}>Chats</Text>
+                        <TouchableOpacity onPress={newMessageInit}>
+                            <Entypo name="new-message" size={24} color="#fff" />
+                        </TouchableOpacity>
                     </View>
-                }
-                {
-                    (chats && !loading && !tempChats) &&
-                    <Conversations 
-                        chats={chats}
-                        conversationSelect={conversationSelect}
-                    />
-                }
-                {
-                    tempChats &&
-                    <TempChats
-                        tempChats={tempChats}
-                        conversationSelect={conversationSelect}
-                    />
-                }
-            </ScrollView>
+                    <View style={{width: '100%', alignItems: 'center'}}>
+                        <TextInput
+                            placeholder="Search"
+                            onChange={conversationSearch}
+                            autoComplete="off"
+                            type="text" 
+                            style={style.textInput}
+                        />
+                    </View>
+                </View>
+                <ScrollView style={{height: '100%'}}>
+                    {
+                        newMessage.is_searching &&
+                        <View>
+                        </View>
+                    }
+                    {
+                        (chats && !loading && !tempChats) &&
+                        <Conversations 
+                            chats={chats}
+                            conversationSelect={conversationSelect}
+                        />
+                    }
+                    {
+                        tempChats &&
+                        <TempChats
+                            tempChats={tempChats}
+                            conversationSelect={conversationSelect}
+                        />
+                    }
+                </ScrollView>
+            </View>
+            <UserModal 
+                userSettings={userSettings}
+                setUserSettings={setUserSettings}
+            />
+            <NewMessageModal/>
         </SafeAreaView>
     )
 }
@@ -216,3 +237,5 @@ const style = StyleSheet.create({
         marginBottom: 10
     }
 })
+
+

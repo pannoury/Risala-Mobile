@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 import { chatReducer } from "../../../../src/redux/chat";
 import isUrl from 'is-url'
 import messageStyler from "../functions/messageStyler";
@@ -163,20 +163,20 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
 
     function styleMessageBuble(){
         if(nextMatch && previousMatch){
-            return '6px 20px 20px 6px'
+            return [20, 6, 6, 20]
         } else if(nextMatch && !previousMatch){
-            return '20px 20px 20px 6px'
-        } else if(previousMatch && !nextMatch && !reply){
-            return '6px 20px 20px 20px'
+            return [20, 20, 6, 20]
+        } else if(previousMatch && !nextMatch){
+            return [20, 6, 20, 20]
         } else {
             return null
         }
     }
 
     //Styled components for Aspect Ratios
-    const oneToOne = { maxWidth: '200px', height: '200px'}
-    const sixteenToNine = { maxWidth: '364px', maxHeigth: '201px'}
-    const nineToSixteen = { maxWidth: '201px', maxHeigth: '364px'}
+    //const oneToOne = { maxWidth: '200px', height: '200px'}
+    //const sixteenToNine = { maxWidth: '364px', maxHeigth: '201px'}
+    //const nineToSixteen = { maxWidth: '201px', maxHeigth: '364px'}
 
     function scrollToReply(message_id){
         var elementWithMessageId = document.querySelector(`[message_id="${message_id}"]`)
@@ -195,6 +195,18 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
         }))
     }
 
+    const style = StyleSheet.create({
+        chatBubble: {
+            backgroundColor: '#737272',
+            paddingTop: 4, paddingBottom: 4, paddingLeft: 4, paddingRight: 4,
+            borderTopRightRadius: styleMessageBuble[0] ??= 20,
+            borderTopLeftRadius: styleMessageBuble[1] ??= 20,
+            borderBottomLeftRadius: styleMessageBuble[2] ??= 20,
+            borderBottomRightRadius: styleMessageBuble[3] ??= 20,
+            maxWidth: Dimensions.get("screen").width / 2
+        }
+    })
+
     return(
         <>
             <View
@@ -206,14 +218,21 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                 timestamp={value.timestamp}
                 file={file ? filePath : null}
                 title={timestamp}
+                style={{flexDirection: 'row', alignItems: 'center', marginBottom: 6}}
             >
                 {
                     (group && (!previousMatch && !nextMatch || previousMatch && !nextMatch)) &&
-                    <Image source={{uri: sender ? sender.profile_picture ? sender.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                    <Image 
+                        style={{width: 20, height: 20, borderRadius: 10, marginRight: 10}}
+                        source={{uri: sender ? sender.profile_picture ? sender.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                    />
                 }
                 {
                     (!group && ((!previousMatch && !nextMatch) || previousMatch && !nextMatch)) &&
-                    <Image source={{uri: COUNTER_DATA[0].profile_picture ? `${COUNTER_DATA[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                    <Image 
+                        style={{width: 20, height: 20, borderRadius: 10, marginRight: 10}}
+                        source={{uri: COUNTER_DATA[0].profile_picture ? `${COUNTER_DATA[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                    />
                 }
                 {
                     reply === true ?
@@ -245,13 +264,13 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                                     var type = mediaObject.type.split('/')[0]
                                                     var style = null
                                                     
-                                                    if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
-                                                        style = sixteenToNine
-                                                    } else if(aspectRatio === 1){
-                                                        style = oneToOne
-                                                    } else {
-                                                        style = nineToSixteen
-                                                    }
+                                                    //if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
+                                                    //    style = sixteenToNine
+                                                    //} else if(aspectRatio === 1){
+                                                    //    style = oneToOne
+                                                    //} else {
+                                                    //    style = nineToSixteen
+                                                    //}
                                                 }
 
                                                 if(type === "image"){
@@ -344,7 +363,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
 
     function NotReply(){
         return(
-            <View className="recieved-message-wrapper">
+            <View>
                 {
                     (sender && group && !previousMatch) &&
                     <>
@@ -376,13 +395,13 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                         (only_emoji !== "" && !file && !filePath) &&
                         <View 
                             className="message" 
-                            //style={{borderRadius: styleMessageBuble()}}
+                            style={style.chatBubble}
                         >
                             {
                                 !url ?
-                                <Text>{`${value.text}`}</Text>
+                                <Text style={{color: '#fff'}}>{`${value.text}`}</Text>
                                 :
-                                <Text href={value.text} target="_blank">{value.text}</Text>
+                                <Text href={value.text} style={{color: '#fff'}}>{value.text}</Text>
                             }
                         </View>
                     }

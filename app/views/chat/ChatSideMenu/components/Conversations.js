@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, Text, Image, Pressable, TouchableOpacity, StyleSheet } from "react-native";
+import { ScrollView, View, Text, Image, Pressable, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { timeStamp } from "../../../../src/lib/timeStamp";
 import { chatReducer, arrayEmptyu } from "../../../../src/redux/chat";

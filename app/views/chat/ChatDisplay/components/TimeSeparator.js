@@ -92,8 +92,11 @@ export default function TimeSeparator({value, current_id}){
             className="separator" 
             message_id={value.message_id} 
             current-id={current_id}
+            style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}
         >
-            <Text>{value.timestamp.substring(8,10) + ' ' + month_string}</Text>
+            <Text style={{fontWeight: '600', color: '#fff'}}>
+                {value.timestamp.substring(8,10) + ' ' + month_string}
+            </Text>
         </View>
     )
 }

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { chatReducer } from "../../../../src/redux/chat";
 import isUrl from 'is-url'
 import { Video, AVPlaybackStatus } from 'expo-av';
+import { globalStyles } from "../../../../src/styles/globalStyles";
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 import Files                from "./Files";
@@ -116,17 +117,17 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
     }
 
     //Styled components for Aspect Ratios
-    const oneToOne = { maxWidth: '200px', maxHeight: '200px'}
-    const sixteenToNine = { maxWidth: '364px', maxHeigth: '201px'}
-    const nineToSixteen = { maxWidth: '201px', maxHeigth: '364px'}
+    //const oneToOne = { maxWidth: '200px', maxHeight: '200px'}
+    //const sixteenToNine = { maxWidth: '364px', maxHeigth: '201px'}
+    //const nineToSixteen = { maxWidth: '201px', maxHeigth: '364px'}
 
     function styleMessageBuble(){
         if(nextMatch && previousMatch){
-            return '20px 6px 6px 20px'
+            return [20, 6, 6, 20]
         } else if(nextMatch && !previousMatch){
-            return '20px 20px 6px 20px'
+            return [20, 20, 6, 20]
         } else if(previousMatch && !nextMatch){
-            return '20px 6px 20px 20px'
+            return [20, 6, 20, 20]
         } else {
             return null
         }
@@ -149,19 +150,17 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
         }))
     }
 
-    function doubleClick(e){
-        var target = e.target
-
-        //if(!target.classList.contains('focused-message')){
-        //    setIsFocused(true)
-        //    target.classList.add('focused-message')
-        //} else {
-        //    setIsFocused(false)
-        //    target.classList.remove('focused-message')
-        //}
-        //
-        //
-    }
+    const style = StyleSheet.create({
+        chatBubble: {
+            backgroundColor: chat_settings.color,
+            paddingTop: 4, paddingBottom: 4, paddingLeft: 4, paddingRight: 4,
+            borderTopRightRadius: styleMessageBuble[0] ??= 20,
+            borderTopLeftRadius: styleMessageBuble[1] ??= 20,
+            borderBottomLeftRadius: styleMessageBuble[2] ??= 20,
+            borderBottomRightRadius: styleMessageBuble[3] ??= 20,
+            maxWidth: Dimensions.get("screen").width / 2
+        }
+    })
 
     return(
         <>
@@ -173,8 +172,9 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                 key={value.message_id}
                 file={file ? `[${filePath.map(e => `"${e.path}"`)}]` : null}
                 title={timestamp}
+                style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2}}
             >
-                <Text className="message-time-stamp">{timestamp}</Text>
+                <Text style={globalStyles.timestamp}>{timestamp}</Text>
                 {
                     reply === true ?
                     <View className="message-wrapper">
@@ -189,7 +189,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                             </View>
                             {
                                 isMedia && value.reply_text &&
-                                <View className="reply-chat-bubble media">
+                                <View className="reply-chat-bubble media" style={style.chatBubble}>
                                     {
                                         isMedia.map((e, i) => {
 
@@ -205,13 +205,13 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                                 var type = mediaObject.type.split('/')[0]
                                                 var style = null
                                                 
-                                                if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
-                                                    style = sixteenToNine
-                                                } else if(aspectRatio === 1){
-                                                    style = oneToOne
-                                                } else {
-                                                    style = nineToSixteen
-                                                }
+                                                //if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
+                                                //    style = sixteenToNine
+                                                //} else if(aspectRatio === 1){
+                                                //    style = oneToOne
+                                                //} else {
+                                                //    style = nineToSixteen
+                                                //}
                                             }
 
 
@@ -238,7 +238,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                             }
                             {
                                 !isMedia && value.reply_text && !fileReply &&
-                                <View className="reply-chat-bubble">
+                                <View className="reply-chat-bubble" style={style.chatBubble}>
                                     <Text>{value.reply_text}</Text>
                                 </View>
                             }
@@ -275,6 +275,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                 ((!file && !filePath && only_emoji !== "") || fileReply) &&
                                 <View 
                                     className="message" 
+                                    style={style.chatBubble}
                                     //style={{backgroundColor: chat_settings.color, marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
                                 >
                                     {
@@ -296,7 +297,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
 
     function NotReply(){
         return(
-            <View className="message-wrapper">
+            <View>
                 {
                     (only_emoji === "" && value.text !== "") &&
                     <View className="message emoji">
@@ -316,14 +317,13 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                     (only_emoji !== "" && !file && !filePath) &&
                     <View 
                         className="message" 
-                        onDoubleClick={doubleClick}
-                        //style={{backgroundColor: chat_settings.color, borderRadius: styleMessageBuble()}}
+                        style={style.chatBubble}
                     >
                         {
                             !url ?
-                            <Text>{`${value.text}`}</Text>
+                            <Text style={{color: '#fff'}}>{`${value.text}`}</Text>
                             :
-                            <Text href={value.text} target="_blank">{value.text}</Text>
+                            <Text href={value.text} style={{color: '#fff'}}>{value.text}</Text>
                         }
                     </View>
                 }

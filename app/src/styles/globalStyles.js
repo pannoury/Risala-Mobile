@@ -53,5 +53,8 @@ export const globalStyles = StyleSheet.create({
         color: '#000',
         padding: 20,
         marginBottom: 20,
+    },
+    timestamp: {
+        color: '#ffffffb3'
     }
 })

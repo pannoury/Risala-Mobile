@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Modal } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer, user_search_remove } from "../features/chat";
 import { callSettingReducer } from "../features/callSettings";
@@ -77,39 +78,6 @@ export default function  ChatTop({setWidth, socket}){
         }
     }, [current])
 
-    function escapeClick(e){
-        if(e.code === "Escape" && newMessage.is_searching === true){
-            dispatch(chatReducer({
-                newMessage: {
-                    is_searching: false
-                },
-                USER_SEARCH: {
-                    ID: [],
-                    NAMES: [],
-                    MEMBERS: []
-                }
-            }))
-            setUserSearch("")
-            setUserSearchResult(undefined)
-        } else if(e.code === "Backspace" && (USER_SEARCH.NAMES.length > 0 || !USER_SEARCH.NAMES) && userSearchRef.current.value.length === 0){
-            if(USER_SEARCH.NAMES.length === 1){
-                dispatch(chatReducer({USER_SEARCH: {
-                    ID: [],
-                    NAMES: [],
-                    MEMBERS: []
-                }}))
-            } else {
-                dispatch(chatReducer({ USER_SEARCH: {
-                    ID: USER_SEARCH.ID.filter((e, i) => i !== (USER_SEARCH.NAMES.length - 1)),
-                    NAMES: USER_SEARCH.NAMES.filter((e, i) => i !== (USER_SEARCH.NAMES.length - 1)),
-                    MEMBERS: USER_SEARCH.MEMBERS.filter((e, i) => i !== (USER_SEARCH.NAMES.length - 1))
-                }}))
-            }
-        } else if(e.code === "ArrowDown"){
-            //Fix so that it selects from top and down when ArrowDown is clicked
-        }
-    }
-
     //If user clicks on (X) in the USER_BOX
     function removeTag(e){
         var element = e.target.parentElement
@@ -153,7 +121,7 @@ export default function  ChatTop({setWidth, socket}){
     }
 
     return(
-        <div 
+        <Modal 
             className="chat-top"
             data-label={newMessage.is_searching === true ? "user-search" : ""}
         >
@@ -290,7 +258,7 @@ export default function  ChatTop({setWidth, socket}){
                     <div className="user-search-mock"><div className="mock-profile"><div className="skeleton"></div></div><div className="mock"><div className="skeleton"></div></div></div>
                 </div>
             }
-        </div>
+        </Modal>
     )
 
     //This function is triggered when user clicks on a profile in the 

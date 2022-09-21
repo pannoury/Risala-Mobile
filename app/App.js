@@ -7,6 +7,7 @@ import { getStorage } from './src/lib/asyncStorage';
 import { postRequest } from './api/api';
 import store from './src/redux/store';
 import { chatReducer } from './src/redux/chat';
+import 'react-native-gesture-handler';
 
 // Views
 import Login  from './views/Login';
@@ -40,30 +41,28 @@ export default function App({ }){
   return (
     <Provider store={store}>
       <SocketProvider>
-        <SafeAreaProvider>
-          <StatusBar
-            backgroundColor="#000"
-            barStyle={'light-content'}
+        <StatusBar
+          backgroundColor="#000"
+          barStyle={'light-content'}
+        />
+        {
+          page === "Chat" &&
+          <Chat 
+            page={page}
+            setPage={setPage}
           />
-          {
-            page === "Chat" &&
-            <Chat 
-              page={page}
-              setPage={setPage}
-            />
-          }
-          {
-            page === "Login" &&
-            <Login 
-              page={page}
-              setPage={setPage}
-            />
-          }
-          {
-            page === "Home" &&
-            <Home/>
-          }
-        </SafeAreaProvider>
+        }
+        {
+          page === "Login" &&
+          <Login 
+            page={page}
+            setPage={setPage}
+          />
+        }
+        {
+          page === "Home" &&
+          <Home/>
+        }
       </SocketProvider>
     </Provider>
   );

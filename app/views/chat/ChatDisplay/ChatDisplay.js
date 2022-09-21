@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, ScrollView, SafeAreaView, ActivityIndicator } from "react-native";
+import { View, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Text, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { postRequest, errorManagement } from "../../../api/api";
 import { chatReducer } from "../../../src/redux/chat";
 import { timeStamp } from "../../../src/lib/timeStamp";
 import useLocale from "../../../src/lib/useLocale";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 // Components
 import RecievedMessage      from "./components/RecievedMessage";
@@ -16,8 +17,9 @@ import GroupBadge           from "./components/GroupBadge";
 import Typing               from "./components/Typing";
 import CallEvent            from "./components/CallEvent";
 import informationManager   from "../../../src/lib/informationManager";
+import ChatBottom           from "../ChatBottom/ChatBottom";
 
-export default function ChatDisplay({}) {
+export default function ChatDisplay({ navigation }) {
     const dispatch = useDispatch();
     const locale = useLocale();
     const newMessage = useSelector((state) => state.chatReducer.value.newMessage)
@@ -26,6 +28,7 @@ export default function ChatDisplay({}) {
     const USER_DATA = useSelector((state) => state.chatReducer.value.USER_DATA)
     const current = useSelector((state) => state.chatReducer.value.current)
     const chat = useSelector((state) => state.chatReducer.value.chat)
+    const chat_settings = useSelector((state) => state.chatReducer.value.chat_settings)
 
     const typingAudio = useRef()
     const inputRef = useRef()
@@ -36,9 +39,16 @@ export default function ChatDisplay({}) {
     const [loading, setLoading] = useState(true)
     const [chatLoading, setChatLoading] = useState(false) //When fetching more messages
     const [group, setGroup] = useState(false)
+    const [alias, setAlias] = useState(undefined)
     const [control, setControl] = useState(false)
+    const [nickname, setNickname] = useState(undefined)
+    const [counter, setCounter] = useState(undefined)
 
     const chatDisplayWindow = useRef(null);
+
+    function conversationOptions(){
+
+    }
 
     useEffect(() => {
         setOffset(0)
@@ -125,6 +135,41 @@ export default function ChatDisplay({}) {
         }
     }, [reply])
 
+    useEffect(() => {
+        setLoading(true)
+        if(current && current.members){
+            setCounter()
+            if(current.members.length > 2){
+                setGroup(current.members)
+            } else {
+                setGroup(undefined)
+                var nicknames = current.nicknames
+
+                if(nicknames){
+                    nicknames = JSON.parse(current.nicknames)
+                    if(nicknames.find((e) => e.id !== USER_DATA.account_id)){
+                        setNickname(nicknames.find((e) => e.id !== USER_DATA.account_id).nickname)
+                    } else {
+                        setNickname(undefined)
+                    }
+                } else {
+                    setNickname(undefined)
+                }
+            }
+
+            if(current.alias){
+                setAlias(current.alias)
+            } else {
+                if(current && current.alias){
+                    setAlias(current.alias)
+                } else {
+                    setAlias(undefined)
+                }
+            }
+            setLoading(false)
+        }
+    }, [current])
+
     function scrollDetect(e){
         if(chatDisplayWindow?.scrollTop === 0 && moreMessage && chatDisplayWindow.current.childElementCount >= 100 && !loading){
             setChatLoading(true)
@@ -151,15 +196,88 @@ export default function ChatDisplay({}) {
         }
     }
 
+    function goBack(){
+        navigation.goBack()
+    }
+
     return(
         <SafeAreaView 
             className="chat-display"
-            style={{height: '100%'}}
-        >   
+            style={{height: '100%', backgroundColor: '#000'}}
+        >
+            <View style={{height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}> 
+                    <TouchableOpacity onPress={goBack}>
+                        <MaterialIcons name="chevron-left" size={30} color={chat_settings.color}/>
+                    </TouchableOpacity>
+                    {
+                        (group && !loading) &&
+                        <TouchableOpacity style={{flexDirection: 'row'}}>
+                            <View>
+                                <Image />
+                                <Image />
+                            </View>
+                            <Text>
+                                {
+                                    (group && !alias) &&
+                                    group.map((e, i, row) => {
+                                        if(i + 1 === row.length){
+                                            return e.firstname
+                                        } else {
+                                            return `${e.firstname}, `
+                                        }
+                                    })
+                                }
+                                {
+                                    (group && alias) &&
+                                    <>{alias}</>
+                                }
+                            </Text>
+                        </TouchableOpacity>
+                    }
+                    {
+                        (!group && !loading && COUNTER_DATA) &&
+                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Image 
+                                style={{width: 30, height: 30, borderRadius: 15}}
+                                source={{uri: COUNTER_DATA ? COUNTER_DATA[0].profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png" }}
+                            />
+                            {
+                                nickname ?
+                                <Text>{nickname}</Text>
+                                :
+                                <Text style={{color: '#fff', marginLeft: 10, fontWeight: '600', fontSize: 18}}>
+                                    { COUNTER_DATA ? COUNTER_DATA[0].firstname + ' ' + COUNTER_DATA[0].lastname : ""}
+                                </Text>
+                            }
+                        </TouchableOpacity>
+                    }
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    {
+                        !group &&
+                        <>
+                            <TouchableOpacity 
+                                data-value="call"
+                                //onClick={(() => { callClick('call') })}
+                            >
+                                <MaterialIcons name="call" size={24} color={chat_settings.color} />
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={{marginLeft: 10}}
+                                data-value="video"
+                                //onClick={(() => { callClick('video') })}
+                            >
+                                <MaterialIcons name="videocam" size={24} color={chat_settings.color} />
+                            </TouchableOpacity>
+                        </>
+                    }
+                </View>
+            </View>  
             <ScrollView 
                 ref={chatDisplayWindow}
                 current-id={current ? current.id : null}
-                style={{}}
+                style={{backgroundColor: '#000'}}
             >
                 {
                     chatLoading &&
@@ -273,6 +391,7 @@ export default function ChatDisplay({}) {
                     chatDisplayWindow={chatDisplayWindow}
                 />
             </ScrollView>
+            
             <ArrowBottom
                 chatDisplayWindow={chatDisplayWindow}
             />

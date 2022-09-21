@@ -10,17 +10,20 @@ export default function ArrowBottom({chatDisplayWindow}){
     const [arrowBotton, setArrowBotton] = useState(false)
     const [isListening, setIsListening] = useState(false)
 
-    useEffect(() => {
-        setTimeout(() => {
-            chatDisplayWindow.current.addEventListener('scroll', isTypingScrollDetect)
-        }, 500)
-
-        return(() => {
-            if(isListening){
-                chatDisplayWindow.current.removeEventListener('scroll', isTypingScrollDetect)
-            }
-        })
-    }, [current])
+    //useEffect(() => {
+    //    if(chatDisplayWindow.current){
+    //        console.log(chatDisplayWindow)
+    //        setTimeout(() => {
+    //            chatDisplayWindow.current.addEventListener('scroll', isTypingScrollDetect)
+    //        }, 500)
+    //    }
+    //
+    //    return(() => {
+    //        if(isListening){
+    //            chatDisplayWindow.current.removeEventListener('scroll', isTypingScrollDetect)
+    //        }
+    //    })
+    //}, [current, chatDisplayWindow])
 
     function isTypingScrollDetect(e){
         setIsListening(true)
