@@ -161,7 +161,7 @@ export default function ChatSideMenu({ navigation }){
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '90%', marginBottom: 10}}>
                         <Pressable onPress={(() => { setUserSettings(!userSettings) })}>
                             <Image 
-                                style={{width: 30, height: 30, bo1rderRadius: 15}}
+                                style={{width: 30, height: 30, borderRadius: 15}}
                                 source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
                             />
                         </Pressable>
