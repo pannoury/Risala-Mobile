@@ -1,11 +1,12 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
+import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { chatReducer } from "../../../../src/redux/chat";
 import isUrl from 'is-url'
 import messageStyler from "../functions/messageStyler";
 import { Video, AVPlaybackStatus } from 'expo-av';
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { globalStyles } from "../../../../src/styles/globalStyles";
 
 import Files                from "./Files";
 import removeEmojis         from "../functions/removeEmojis";
@@ -163,20 +164,23 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
 
     function styleMessageBuble(){
         if(nextMatch && previousMatch){
-            return [20, 6, 6, 20]
+            return [6, 20, 20, 6]
         } else if(nextMatch && !previousMatch){
-            return [20, 20, 6, 20]
+            return [20, 20, 20, 6]
         } else if(previousMatch && !nextMatch){
-            return [20, 6, 20, 20]
+            return [6, 20, 20, 20]
         } else {
             return null
         }
     }
 
     //Styled components for Aspect Ratios
-    //const oneToOne = { maxWidth: '200px', height: '200px'}
-    //const sixteenToNine = { maxWidth: '364px', maxHeigth: '201px'}
-    //const nineToSixteen = { maxWidth: '201px', maxHeigth: '364px'}
+    const smallSize = Dimensions.get("screen").width * 0.2
+    const midSize = Dimensions.get("screen").width * 0.25
+    const largeSize = Dimensions.get("screen").width * 0.3621
+    const oneToOne = { width: midSize, height: midSize}
+    const sixteenToNine = { width: largeSize, height: smallSize}
+    const nineToSixteen = { width: smallSize, height: largeSize}
 
     function scrollToReply(message_id){
         var elementWithMessageId = document.querySelector(`[message_id="${message_id}"]`)
@@ -195,15 +199,30 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
         }))
     }
 
+    var chatBorderRadius = styleMessageBuble()
+
     const style = StyleSheet.create({
         chatBubble: {
             backgroundColor: '#737272',
-            paddingTop: 4, paddingBottom: 4, paddingLeft: 4, paddingRight: 4,
-            borderTopRightRadius: styleMessageBuble[0] ??= 20,
-            borderTopLeftRadius: styleMessageBuble[1] ??= 20,
-            borderBottomLeftRadius: styleMessageBuble[2] ??= 20,
-            borderBottomRightRadius: styleMessageBuble[3] ??= 20,
-            maxWidth: Dimensions.get("screen").width / 2
+            paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12,
+            borderTopLeftRadius: chatBorderRadius           ? chatBorderRadius[0] : 20,
+            borderTopRightRadius: chatBorderRadius          ? chatBorderRadius[1] : 20,
+            borderBottomRightRadius: chatBorderRadius       ? chatBorderRadius[2] : 20,
+            borderBottomLeftRadius: chatBorderRadius        ? chatBorderRadius[3] : 20,
+            maxWidth: Dimensions.get("screen").width * 0.6,
+            alignSelf: 'flex-start',
+            marginLeft: !nextMatch ? 0 : 40
+        },
+        list: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: !nextMatch ? 10 : 2
+        },
+        counterProfilePicture: {
+            width: 30, 
+            height: 30, 
+            borderRadius: 15, 
+            marginRight: 10
         }
     })
 
@@ -218,20 +237,20 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                 timestamp={value.timestamp}
                 file={file ? filePath : null}
                 title={timestamp}
-                style={{flexDirection: 'row', alignItems: 'center', marginBottom: 6}}
+                style={style.list}
             >
                 {
                     (group && (!previousMatch && !nextMatch || previousMatch && !nextMatch)) &&
                     <Image 
-                        style={{width: 20, height: 20, borderRadius: 10, marginRight: 10}}
-                        source={{uri: sender ? sender.profile_picture ? sender.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                        style={style.counterProfilePicture}
+                        source={{uri: sender ? sender.profile_picture ? `https://risala.codenoury/${sender.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}}
                     />
                 }
                 {
                     (!group && ((!previousMatch && !nextMatch) || previousMatch && !nextMatch)) &&
                     <Image 
-                        style={{width: 20, height: 20, borderRadius: 10, marginRight: 10}}
-                        source={{uri: COUNTER_DATA[0].profile_picture ? `${COUNTER_DATA[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                        style={style.counterProfilePicture}
+                        source={{uri: COUNTER_DATA[0].profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
                     />
                 }
                 {
@@ -243,13 +262,16 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                     className="reply-from"
                                     message_id={value.reply_to_message_id}
                                     onClick={(() => { scrollToReply(value.reply_to_message_id) })}
+                                    style={{flexDirection: 'row', marginBottom: 6}}
                                 >
-                                    <FontAwesome name="reply" color={"#fff"} size={24}/>
-                                    <Text>{replied_text}</Text>
+                                    <FontAwesome name="reply" color={globalStyles.colors.white_1} size={18}/>
+                                    <Text style={{color: globalStyles.colors.white_1, marginLeft: 10}}>{replied_text}</Text>
                                 </View>
                                 {
                                     isMedia && value.reply_text &&
-                                    <View className="reply-chat-bubble media">
+                                    <View className="reply-chat-bubble media"
+                                        style={{flexDirection: 'row', alignItems: 'flex-end', flexWrap: 'wrap'}}
+                                    >
                                         {
                                             isMedia.map((e, i) => {
 
@@ -264,32 +286,37 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                                     var type = mediaObject.type.split('/')[0]
                                                     var style = null
                                                     
-                                                    //if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
-                                                    //    style = sixteenToNine
-                                                    //} else if(aspectRatio === 1){
-                                                    //    style = oneToOne
-                                                    //} else {
-                                                    //    style = nineToSixteen
-                                                    //}
+                                                    if(aspectRatio > 1.7){ //16:9
+                                                        style = sixteenToNine
+                                                    } else if(aspectRatio === 1){
+                                                        style = oneToOne
+                                                    } else {
+                                                        style = nineToSixteen
+                                                    }
                                                 }
 
                                                 if(type === "image"){
                                                     return(
-                                                        <Image 
-                                                            //style={style ? style : null}
-                                                            key={e + 'reply'}
-                                                            onClick={(() => { fileClick(e) })}
-                                                            source={{e}}
-                                                        />
+                                                        <TouchableOpacity style={{marginLeft: 8}}>
+                                                            <Image 
+                                                                //style={style ? style : null}
+                                                                key={e + 'reply'}
+                                                                onClick={(() => { fileClick(e) })}
+                                                                source={{uri: `https://risala.codenoury.se/${e.substring(3)}`}}
+                                                                style={style}
+                                                            />
+                                                        </TouchableOpacity>
                                                     )
                                                 } else {
                                                     return(
-                                                        <Video 
-                                                            source={{e}}
-                                                            //style={style ? style : null}
-                                                            key={e + 'reply'}
-                                                            onClick={(() => { fileClick(e) })}
-                                                        />
+                                                        <TouchableOpacity>
+                                                            <Video 
+                                                                source={{e}}
+                                                                //style={style ? style : null}
+                                                                key={e + 'reply'}
+                                                                onClick={(() => { fileClick(e) })}
+                                                            />
+                                                        </TouchableOpacity>
                                                     )
                                                 }
                                             })
@@ -324,27 +351,27 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                 }
                                 {
                                     !isMedia && value.reply_text && !fileReply &&
-                                    <View className="reply-chat-bubble">
-                                        <Text>{value.reply_text}</Text>
+                                    <View className="reply-chat-bubble" style={{}}>
+                                        <Text style={{color: '#fff'}}>{value.reply_text}</Text>
                                     </View>
                                 }
                                 {
                                     (only_emoji === "" && value.text !== "") &&
                                     <View className="message emoji">
-                                        <Text>{value.text}</Text>
+                                        <Text style={{fontSize: 40}}>{value.text}</Text>
                                     </View>
                                 }
                                 {
                                     ((!file && !filePath) || fileReply) &&
                                     <View 
                                         className="message"
-                                        //style={{marginTop: fileReply ? '-20px' : null, borderRadius: styleMessageBuble()}}
+                                        style={style.chatBubble}
                                     >
                                         {
                                             !url ?
-                                            <Text>{`${value.text}`}</Text>
+                                            <Text style={{color: '#fff'}}>{`${value.text}`}</Text>
                                             :
-                                            <Text href={value.text} target="_blank">{value.text}</Text>
+                                            <Text href={value.text} target="_blank" style={{color: '#fff'}}>{value.text}</Text>
                                         }
                                     </View>
                                 }
@@ -379,7 +406,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                     {
                         (only_emoji === "" && value.text !== "") &&
                         <View className="message emoji">
-                            <Text>{value.text}</Text>
+                            <Text style={{fontSize: 40}}>{value.text}</Text>
                         </View>
                     }
                     {

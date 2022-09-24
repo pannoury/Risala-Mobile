@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Components
 import ChatSideMenu from "./chat/ChatSideMenu/ChatSideMenu";
 import ChatDisplay from "./chat/ChatDisplay/ChatDisplay";
+import ChatSettings from "./chat/ChatSettings/ChatSettings";
 
 // Library
 import { SocketContext } from "../src/lib/Socket";
@@ -111,6 +112,7 @@ export default function Chat({ navigation, page, setPage }){
             <Stack.Navigator>
                 <Stack.Screen name="Sidemenu" component={ChatSideMenu} options={{headerShown: false}}/>
                 <Stack.Screen name="Display" component={ChatDisplay} options={{headerShown: false}} />
+                <Stack.Screen name="Settings" component={ChatSettings} options={{headerShown: false}}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

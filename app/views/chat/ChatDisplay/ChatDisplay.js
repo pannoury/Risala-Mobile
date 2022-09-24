@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Text, Image } from "react-native";
+import { View, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { postRequest, errorManagement } from "../../../api/api";
 import { chatReducer } from "../../../src/redux/chat";
@@ -200,22 +200,29 @@ export default function ChatDisplay({ navigation }) {
         navigation.goBack()
     }
 
+    function conversationSettings(){
+        navigation.navigate('Settings')
+    }
+
     return(
         <SafeAreaView 
             className="chat-display"
             style={{height: '100%', backgroundColor: '#000'}}
         >
-            <View style={{height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <View style={style.chatTop}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}> 
                     <TouchableOpacity onPress={goBack}>
                         <MaterialIcons name="chevron-left" size={30} color={chat_settings.color}/>
                     </TouchableOpacity>
                     {
                         (group && !loading) &&
-                        <TouchableOpacity style={{flexDirection: 'row'}}>
+                        <TouchableOpacity 
+                            onPress={conversationSettings}
+                            style={{flexDirection: 'row'}}
+                        >
                             <View>
-                                <Image />
-                                <Image />
+                                <Image source={{uri: group[0].profile_picture ? `https://risala.codenoury.se/${group[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                                <Image source={{uri: group[1].profile_picture ? `https://risala.codenoury.se/${group[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                             </View>
                             <Text>
                                 {
@@ -237,16 +244,19 @@ export default function ChatDisplay({ navigation }) {
                     }
                     {
                         (!group && !loading && COUNTER_DATA) &&
-                        <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <TouchableOpacity 
+                            onPress={conversationSettings}
+                            style={{flexDirection: 'row', alignItems: 'center'}}
+                        >
                             <Image 
                                 style={{width: 30, height: 30, borderRadius: 15}}
                                 source={{uri: COUNTER_DATA ? COUNTER_DATA[0].profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png" }}
                             />
                             {
                                 nickname ?
-                                <Text>{nickname}</Text>
+                                <Text style={style.chatTopName}>{nickname}</Text>
                                 :
-                                <Text style={{color: '#fff', marginLeft: 10, fontWeight: '600', fontSize: 18}}>
+                                <Text style={style.chatTopName}>
                                     { COUNTER_DATA ? COUNTER_DATA[0].firstname + ' ' + COUNTER_DATA[0].lastname : ""}
                                 </Text>
                             }
@@ -278,6 +288,7 @@ export default function ChatDisplay({ navigation }) {
                 ref={chatDisplayWindow}
                 current-id={current ? current.id : null}
                 style={{backgroundColor: '#000'}}
+                //onContentSizeChange={() => chatDisplayWindow.current.scrollToEnd({animated: true})}
             >
                 {
                     chatLoading &&
@@ -398,3 +409,20 @@ export default function ChatDisplay({ navigation }) {
         </SafeAreaView>
     )
 }
+
+const style = StyleSheet.create({
+    chatTop: {
+        height: 50, 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        color: '#fff',
+        backgroundColor: '#000000cc'
+    },
+    chatTopName: {
+        color: '#fff', 
+        marginLeft: 10, 
+        fontWeight: '600', 
+        fontSize: 18
+    }
+})

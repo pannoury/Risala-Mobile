@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import useLocale from "../../hooks/useLocale";
 import { useDispatch, useSelector } from "react-redux";
-import { chatReducer } from "../../features/chat";
+import { chatReducer } from "../../../src/redux/chat";
+import useLocale from "../../../src/lib/useLocale";
 
 export default function GroupMembers({group, admin, setAdmin, options, setOptions, selected, setSelected}){
     const dispatch = useDispatch();

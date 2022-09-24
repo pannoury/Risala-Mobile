@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { chatReducer } from "../../features/chat";
-import fileSizeFormatter from "../../modules/fileSizeFormatter";
+import { View, ScrollView, Text } from "react-native";
+import { chatReducer } from "../../../src/redux/chat";
+import fileSizeFormatter from "../../../src/lib/fileSizeFormatter";
+import useLocale from "../../../src/lib/useLocale";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 //Components
-import GroupMembers from "./GroupMembers";
+import GroupMembers from './GroupMembers';
 
-export default function ChatSettings({ locale, current, USER_DATA }){
+export default function ChatSettings({}){
     const dispatch = useDispatch();
+    const locale = useLocale();
+    const current = useSelector((state) => state.chatReducer.value.current)
+    const USER_DATA = useSelector((state) => state.chatReducer.value.USER_DATA)
     const COUNTER_DATA = useSelector((state) => state.chatReducer.value.COUNTER_DATA)
     const chat_settings = useSelector((state) => state.chatReducer.value.chat_settings)
     const settings = useSelector((state) => state.chatReducer.value.settings)
@@ -154,7 +160,7 @@ export default function ChatSettings({ locale, current, USER_DATA }){
         <>
             {
                 current &&
-                <div className={settings === true ? "chat-settings visible" : "chat-settings"}>
+                <View className={settings === true ? "chat-settings visible" : "chat-settings"}>
                 {
                     (isMediaFiles && mediaFilesPurpose && !isLoading) &&
                     <MediaAndFilesWindow/>
@@ -162,19 +168,19 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                 {
                     (!isMediaFiles && !mediaFilesPurpose && !isLoading) &&
                     <>
-                        <div className="conversation-overview">
+                        <View className="conversation-overview">
                             {
                                 group ?
                                 <>
-                                    <div className="group-figure">
+                                    <View className="group-figure">
                                         <figure>
                                             <img src={group[0].profile_picture ? `${group[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}/>
                                         </figure>
                                         <figure>
                                             <img src={group[1].profile_picture ? `${group[1].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}/>
                                         </figure>
-                                    </div>
-                                    <span>
+                                    </View>
+                                    <Text>
                                         {
                                             (group && !alias) &&
                                             group.map((e, i, row) => {
@@ -189,7 +195,7 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                                             (group && alias) &&
                                             <>{alias}</>
                                         }
-                                    </span>
+                                    </Text>
                                 </>
                                 :
                                 <>
@@ -201,16 +207,16 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                                             </figure>
                                             {
                                                 nickname ?
-                                                <span>{nickname}</span>
+                                                <Text>{nickname}</Text>
                                                 :
-                                                <span>{ (current.members && current.members.length > 0) ? COUNTER_DATA[0].firstname + ' ' + COUNTER_DATA[0].lastname : "Participant"}</span>
+                                                <Text>{ (current.members && current.members.length > 0) ? COUNTER_DATA[0].firstname + ' ' + COUNTER_DATA[0].lastname : "Participant"}</Text>
                                             }
                                         </>
                                     }
                                 </>
                             }
-                        </div>
-                        <div className="settings-list">
+                        </View>
+                        <View className="settings-list">
                             <CustomiseChat/>
                             <MediaAndFilesDropDown/>
                             {
@@ -225,74 +231,74 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                                         selected={selected}
                                         setSelected={setSelected}
                                     />
-                                    <div className="options-wrapper-wrapper">
-                                        <div 
+                                    <View className="options-wrapper-wrapper">
+                                        <View 
                                             onClick={leaveChat}
                                             className="settings-option"
                                         >
-                                            <i className="material-icons">logout</i>
-                                            <span>{locale === "en" ? "Leave Chat" : "Lämna chat"}</span>
-                                        </div>
-                                    </div>
+                                            <MaterialIcons name="logout"/>
+                                            <Text>{locale === "en" ? "Leave Chat" : "Lämna chat"}</Text>
+                                        </View>
+                                    </View>
                                 </>
                             }
-                        </div>
+                        </View>
                     </>
                 }
                 {
                     isLoading &&
-                    <div>
+                    <View>
 
-                    </div>
+                    </View>
                 }
                 {
                     options &&
-                    <div 
+                    <View 
                         className="member-settings"
                         style={{top: `${options + 20}px`}}
                     >
-                        <span>
+                        <Text>
                             {locale === "en" ? "Send a message" : "Skicka meddelande"}
-                        </span>
+                        </Text>
                         {
                             admin &&
                             <>
-                            <div className="line"></div>
-                                <span
+                            <View className="line"></View>
+                                <Text
                                     onClick={makeAdmin}
                                 >
                                     {locale === "en" ? "Make admin" : "Gör till administratör"}
-                                </span>
+                                </Text>
                                 {
                                     isSelf ?
-                                    <span
+                                    <Text
                                         onClick={removeUser}
                                     >
                                         {locale === "en" ? "Leave Group" : "Lämna Gruppen"}
-                                    </span>
+                                    </Text>
                                     :
-                                    <span 
+                                    <Text 
                                         onClick={removeUser}
                                     >
                                         {locale === "en" ? "Remove member" : "Ta bort medlem"}
-                                    </span>
+                                    </Text>
                                 }
                             </>
                         }
                         {
                             isSelf && !admin &&
                             <>
-                                <div className="line"></div>
-                                <span
+                                <View className="line"></View>
+                                <Text
                                     onClick={removeUser}
                                 >
                                     {locale === "en" ? "Leave Group" : "Lämna Gruppen"}
-                                </span>
+                                </Text>
                             </>
                         }
-                    </div>
+                    </View>
                 }
-                </div>
+                </View>
             }
         </>
     )
@@ -313,7 +319,7 @@ export default function ChatSettings({ locale, current, USER_DATA }){
 
         return(
             <>
-                <div  className="media-files-top">
+                <View  className="media-files-top">
                     <i 
                         className="material-icons"
                         onClick={(() => {
@@ -322,9 +328,9 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                         })}
                     >keyboard_backspace</i>
                     {locale === "en" ? "Media and Files" : "Media och Filer"}
-                </div>
-                <div className="media-files-selection">
-                    <div 
+                </View>
+                <View className="media-files-selection">
+                    <View 
                         className={mediaFilesPurpose === "media" ? "media-files-option selected" : "media-files-option"} 
                         data-value="media"
                         style={mediaFilesPurpose === "media" ? selectedMenu : null}
@@ -333,8 +339,8 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                         })}
                     >
                         Media
-                    </div>
-                    <div 
+                    </View>
+                    <View 
                         className={mediaFilesPurpose === "files" ? "media-files-option selected" : "media-files-option"} 
                         data-value="files"
                         style={mediaFilesPurpose === "files" ? selectedMenu : null}
@@ -343,9 +349,9 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                         })}
                     >
                         {locale === "en" ? "Files" : "Filer"}
-                    </div>
-                </div>
-                <div className={mediaFilesPurpose === "files" ? "media-files-display files" : "media-files-display"}>
+                    </View>
+                </View>
+                <View className={mediaFilesPurpose === "files" ? "media-files-display files" : "media-files-display"}>
                     {
                         (filesAndMedia && mediaFilesPurpose === "media") &&
                         filesAndMedia.images.map((value, index) => {
@@ -356,25 +362,25 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                             if(type === "image" || type === "video"){
                                 if(type === "video"){
                                     return(
-                                        <div 
+                                        <View 
                                             className="image"
                                             key={value.path}
                                             style={{height: `${widthStyle}px`}}
                                             onClick={(() => { fileClick(value.path) })}
                                         >
                                             <video src={`../${value.path.substring(3)}`}/>
-                                        </div>
+                                        </View>
                                     )
                                 } else {
                                     return(
-                                        <div 
+                                        <View 
                                             className="image"
                                             key={value.path}
                                             style={{height: `${widthStyle}px`}}
                                             onClick={(() => { fileClick(value.path) })}
                                         >
                                             <img src={`../${value.path.substring(3)}`}/>
-                                        </div>
+                                        </View>
                                     )
                                 }
                             }
@@ -395,13 +401,13 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                                         target="_blank" 
                                         rel="noopener noreferrer" 
                                     >
-                                        <i className="material-icons">description</i>
-                                        <div className="file-description">
-                                            <span>
+                                        <MaterialIcons name="description"/>
+                                        <View className="file-description">
+                                            <Text>
                                                 {name.length > 20 ? `${name.substring(0,20)}...` : name}
-                                            </span>
-                                            <span>{fileSize}</span>
-                                        </div>
+                                            </Text>
+                                            <Text>{fileSize}</Text>
+                                        </View>
                                     </a>
                                 )
                             } else{
@@ -413,17 +419,17 @@ export default function ChatSettings({ locale, current, USER_DATA }){
                                         target="_blank" 
                                         rel="noopener noreferrer" 
                                     >
-                                        <i className="material-icons">description</i>
-                                        <div className="file-description">
-                                            <span>{name}</span>
-                                            <span>{fileSize}</span>
-                                        </div>
+                                        <MaterialIcons name="description"/>
+                                        <View className="file-description">
+                                            <Text>{name}</Text>
+                                            <Text>{fileSize}</Text>
+                                        </View>
                                     </a>
                                 )
                             }
                         })
                     }
-                </div>
+                </View>
             </>
         )
     }
@@ -431,91 +437,91 @@ export default function ChatSettings({ locale, current, USER_DATA }){
     //Store dropdown options
     function CustomiseChat(){
         return(
-            <div className="options-wrapper-wrapper">
-                <div 
+            <View className="options-wrapper-wrapper">
+                <View 
                     className="options-wrapper-wrapper-header"
                     onClick={settingsOptionClick} 
                 >
-                    <span>{locale === "en" ? "Customise Chat" : "Anpassa Chatt"}</span>
+                    <Text>{locale === "en" ? "Customise Chat" : "Anpassa Chatt"}</Text>
                     <i className="material-icons more">expand_more</i>
                     <i className="material-icons less">expand_less</i>
-                </div>
-                <div className="options-wrapper">
+                </View>
+                <View className="options-wrapper">
                     {
                         group &&
-                        <div className="settings-option" onClick={(() => { chatWindow('change_name') })}>
-                            <div className="settings-color">
-                                <i className="material-icons">edit</i>
-                            </div>
-                            <span>{locale === "en" ? "Change group name" : "Ändra Chattnamn"}</span>
-                        </div>
+                        <View className="settings-option" onClick={(() => { chatWindow('change_name') })}>
+                            <View className="settings-color">
+                                <MaterialIcons name="edit"/>
+                            </View>
+                            <Text>{locale === "en" ? "Change group name" : "Ändra Chattnamn"}</Text>
+                        </View>
                     }
-                    <div className="settings-option" onClick={(() => { chatWindow('change_color') })}>
-                        <div
+                    <View className="settings-option" onClick={(() => { chatWindow('change_color') })}>
+                        <View
                             className="settings-color" style={chat_settings.color ? {backgroundColor: chat_settings.color} : {backgroundColor: '#d39400'}}
                         >
-                            <div className="dot"></div>
-                        </div>
-                        <span>{locale === "en" ? "Change Theme" : "Ändra Tema"}</span>
-                    </div>
-                    <div className="settings-option" onClick={(() => { chatWindow('change_emoji') })}>
+                            <View className="dot"></View>
+                        </View>
+                        <Text>{locale === "en" ? "Change Theme" : "Ändra Tema"}</Text>
+                    </View>
+                    <View className="settings-option" onClick={(() => { chatWindow('change_emoji') })}>
                         {
                             chat_settings.emoji &&
-                            <div className="emoji">
+                            <View className="emoji">
                                 {chat_settings.emoji}
-                            </div>
+                            </View>
                         }
-                        <span>{locale === "en" ? "Change Emoji" : "Byt Emoji"}</span>
-                    </div>
-                    <div className="settings-option" onClick={(() => { chatWindow('change_nickname') })}>
-                        <div className="settings-color">
+                        <Text>{locale === "en" ? "Change Emoji" : "Byt Emoji"}</Text>
+                    </View>
+                    <View className="settings-option" onClick={(() => { chatWindow('change_nickname') })}>
+                        <View className="settings-color">
                             Aa
-                        </div>
-                        <span>{locale === "en" ? "Change nickname" : "Ändra Smeknamn"}</span>
-                    </div>
-                </div>
-            </div>
+                        </View>
+                        <Text>{locale === "en" ? "Change nickname" : "Ändra Smeknamn"}</Text>
+                    </View>
+                </View>
+            </View>
         )
     }
 
     function MediaAndFilesDropDown(){
         return(
-            <div className="options-wrapper-wrapper">
-                <div 
+            <View className="options-wrapper-wrapper">
+                <View 
                     className="options-wrapper-wrapper-header"
                     onClick={settingsOptionClick} 
                 >
-                    <span>{locale === "en" ? "Media and Files" : "Mediaobjekt och Filer"}</span>
+                    <Text>{locale === "en" ? "Media and Files" : "Mediaobjekt och Filer"}</Text>
                     <i className="material-icons more">expand_more</i>
                     <i className="material-icons less">expand_less</i>
-                </div>
-                <div className="options-wrapper">
-                    <div 
+                </View>
+                <View className="options-wrapper">
+                    <View 
                         className="settings-option"
                         onClick={(() => {
                             setMediaFiles(true)
                             setMediaFilesPurpose("media")
                         })}
                     >
-                        <div>
-                            <i className="material-icons">image</i>
-                        </div>
-                        <span>{locale === "en" ? "Media" : "Media"}</span>
-                    </div>
-                    <div 
+                        <View>
+                            <MaterialIcons name="image"/>
+                        </View>
+                        <Text>{locale === "en" ? "Media" : "Media"}</Text>
+                    </View>
+                    <View 
                         className="settings-option"
                         onClick={(() => {
                             setMediaFiles(true)
                             setMediaFilesPurpose("files")
                         })}
                     >
-                        <div>
-                            <i className="material-icons">description</i>
-                        </div>
-                        <span>{locale === "en" ? "Files" : "Filer"}</span>
-                    </div>
-                </div>
-            </div>
+                        <View>
+                            <MaterialIcons name="description"/>
+                        </View>
+                        <Text>{locale === "en" ? "Files" : "Filer"}</Text>
+                    </View>
+                </View>
+            </View>
         )
     }
 }

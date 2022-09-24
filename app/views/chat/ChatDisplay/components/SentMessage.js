@@ -117,9 +117,12 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
     }
 
     //Styled components for Aspect Ratios
-    //const oneToOne = { maxWidth: '200px', maxHeight: '200px'}
-    //const sixteenToNine = { maxWidth: '364px', maxHeigth: '201px'}
-    //const nineToSixteen = { maxWidth: '201px', maxHeigth: '364px'}
+    const smallSize = Dimensions.get("screen").width * 0.2
+    const midSize = Dimensions.get("screen").width * 0.25
+    const largeSize = Dimensions.get("screen").width * 0.3621
+    const oneToOne = { width: midSize, height: midSize}
+    const sixteenToNine = { width: largeSize, height: smallSize}
+    const nineToSixteen = { width: smallSize, height: largeSize}
 
     function styleMessageBuble(){
         if(nextMatch && previousMatch){
@@ -150,15 +153,24 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
         }))
     }
 
+    var chatBorderRadius = styleMessageBuble()
+
     const style = StyleSheet.create({
         chatBubble: {
             backgroundColor: chat_settings.color,
-            paddingTop: 4, paddingBottom: 4, paddingLeft: 4, paddingRight: 4,
-            borderTopRightRadius: styleMessageBuble[0] ??= 20,
-            borderTopLeftRadius: styleMessageBuble[1] ??= 20,
-            borderBottomLeftRadius: styleMessageBuble[2] ??= 20,
-            borderBottomRightRadius: styleMessageBuble[3] ??= 20,
-            maxWidth: Dimensions.get("screen").width / 2
+            paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12,
+            borderTopLeftRadius: chatBorderRadius           ? chatBorderRadius[0] : 20,
+            borderTopRightRadius: chatBorderRadius          ? chatBorderRadius[1] : 20,
+            borderBottomRightRadius: chatBorderRadius       ? chatBorderRadius[2] : 20,
+            borderBottomLeftRadius: chatBorderRadius        ? chatBorderRadius[3] : 20,
+            maxWidth: Dimensions.get("screen").width * 0.6
+        },
+        list: {
+            width: '100%', 
+            flexDirection: 'row', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
+            marginBottom: !nextMatch ? 10 : 2
         }
     })
 
@@ -172,7 +184,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                 key={value.message_id}
                 file={file ? `[${filePath.map(e => `"${e.path}"`)}]` : null}
                 title={timestamp}
-                style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2}}
+                style={style.list}
             >
                 <Text style={globalStyles.timestamp}>{timestamp}</Text>
                 {
@@ -189,7 +201,10 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                             </View>
                             {
                                 isMedia && value.reply_text &&
-                                <View className="reply-chat-bubble media" style={style.chatBubble}>
+                                <View 
+                                    className="reply-chat-bubble media" 
+                                    style={{flexDirection: 'row', alignItems: "flex-end", flexWrap: 'wrap'}}
+                                >
                                     {
                                         isMedia.map((e, i) => {
 
@@ -205,13 +220,13 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                                 var type = mediaObject.type.split('/')[0]
                                                 var style = null
                                                 
-                                                //if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
-                                                //    style = sixteenToNine
-                                                //} else if(aspectRatio === 1){
-                                                //    style = oneToOne
-                                                //} else {
-                                                //    style = nineToSixteen
-                                                //}
+                                                if(aspectRatio > 1.7){ //16:9
+                                                    style = sixteenToNine
+                                                } else if(aspectRatio === 1){
+                                                    style = oneToOne
+                                                } else {
+                                                    style = nineToSixteen
+                                                }
                                             }
 
 
@@ -221,6 +236,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                                         source={{e}}
                                                         key={e + 'reply'}
                                                         onClick={(() => { fileClick(e) })}
+                                                        style={style}
                                                     />
                                                 )
                                             } else {
@@ -229,6 +245,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                                         key={e + 'replyu'}
                                                         onClick={(() => { fileClick(e) })}
                                                         source={{e}}
+                                                        style={style}
                                                     />
                                                 )
                                             }
@@ -297,7 +314,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
 
     function NotReply(){
         return(
-            <View>
+            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
                 {
                     (only_emoji === "" && value.text !== "") &&
                     <View className="message emoji">

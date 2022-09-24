@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, ScrollView, Text, View, StyleSheet, Pressable, Image, TextInput, FlatList } from "react-native";
+import { Modal, ScrollView, Text, View, StyleSheet, Pressable, Image, TextInput, FlatList, TouchableOpacity } from "react-native";
 import { globalStyles } from "../../../src/styles/globalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
@@ -50,8 +50,6 @@ export default function NewMessageModal(){
             .then((response) => {
                 setUserSuggestLoading(false)
                 setUserSearchResult(response)
-
-                console.log(response)
             })
             .catch((err) => {
                 informationManager({purpose: 'error', message: err.message})
@@ -96,8 +94,8 @@ export default function NewMessageModal(){
 
     function SearchResultSuggestion({item}){
         return(
-            <View
-                style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10, width: '100%'}}
+            <TouchableOpacity
+                style={{flexDirection: 'row', alignItems: 'center', marginBottom: 16, width: '100%'}}
                 data-id={item.account_id}
                 data-firstname={item.firstname}
                 data-lastname={item.lastname}
@@ -111,7 +109,7 @@ export default function NewMessageModal(){
                 <Text style={{color: '#fff', fontSize: 20}}>
                     {item.firstname} {item.lastname}
                 </Text>
-            </View>
+            </TouchableOpacity>
         )
     }
 
@@ -123,22 +121,22 @@ export default function NewMessageModal(){
         >  
             <View style={style.view}>
                 <View style={{width: '100%', height: 50, justifyContent: 'center', alignItems: 'center'}}>
-                    <Pressable 
+                    <TouchableOpacity 
                         style={style.button}
                         onPress={closeNewMessage}
                     >
                         <Text style={{color: "#fff", fontSize: 16, fontWeight: '600'}}>Cancel</Text>
-                    </Pressable>
+                    </TouchableOpacity>
                     <Text style={{color: '#fff', fontWeight: '600', fontSize: 18, marginTop: 18}}>New message</Text>
                 </View>
-                <View style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}>
-                    <Text style={{color: '#fff', marginRight: 10}}>To:</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', width: '100%', height: 50}}>
+                    <Text style={{color: '#fff', marginRight: 10, marginLeft: 10}}>To:</Text>
                     <TextInput
                         onChange={userMsgSearch}
-                        style={{color: '#fff', height: 200, width: '100%'}}
+                        style={{color: '#fff', height: '100%', width: '100%'}}
                     />
                 </View>
-                <View style={{width: '100%', height: '100%', paddingLeft: 10, paddingRight: 10}}>
+                <View style={{width: '100%', height: '100%', paddingLeft: 10, paddingRight: 10, paddingTop: 10}}>
                     <FlatList
                         data={userSearchResult}
                         keyExtractor={(e) => e.account_id}
@@ -164,7 +162,8 @@ const style = StyleSheet.create({
     button: {
         position: 'absolute',
         right: 20,
-        top: 20,
+        bottom: 4,
+        zIndex: 50
     },
     settingsList: {
         flexDirection: 'row',

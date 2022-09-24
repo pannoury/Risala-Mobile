@@ -1,10 +1,11 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer } from "../../../../src/redux/chat";
 import fileSizeFormatter from '../../../../src/lib/fileSizeFormatter'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { Video, AVPlaybackStatus } from 'expo-av';
+import { globalStyles } from "../../../../src/styles/globalStyles";
 
 export default function Files({ value, filePath, recieved, fileReply, reply }){
     const dispatch = useDispatch();
@@ -13,9 +14,12 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
     const chat_settings = useSelector((state) => state.chatReducer.value.chat_settings)
 
     //Styled components for Aspect Ratios
-    const oneToOne = { maxWidth: '200px', maxHeight: '200px'}
-    const sixteenToNine = { maxWidth: '364px', maxHeigth: '201px'}
-    const nineToSixteen = { maxWidth: '201px', maxHeigth: '364px'}
+    const smallSize = Dimensions.get("screen").width * 0.2
+    const midSize = Dimensions.get("screen").width * 0.25
+    const largeSize = Dimensions.get("screen").width * 0.3621
+    const oneToOne = { width: midSize, height: midSize}
+    const sixteenToNine = { width: largeSize, height: smallSize}
+    const nineToSixteen = { width: smallSize, height: largeSize}
 
     function fileClick(e){
         dispatch(chatReducer({
@@ -36,41 +40,41 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                         //The file is an image
                         if(type === "image" || type === "video"){
 
-                            var style;
+                            var imageStyle;
                             var width = value.dimensions[0]
                             var heigth = value.dimensions[1]
                             var aspectRatio = width/heigth
                     
-                            if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
-                                style = sixteenToNine
+                            if(aspectRatio > 1){ //16:9
+                                imageStyle = sixteenToNine
                             } else if(aspectRatio === 1){
-                                style = oneToOne
+                                imageStyle = oneToOne
                             } else {
-                                style = nineToSixteen
+                                imageStyle = nineToSixteen
                             }
 
                             if(type === "image"){
                                 return(
-                                    <>
+                                    <TouchableOpacity style={{marginRight: 8}}>
                                         <Image 
                                             key={value.path + index + 'not-reply'} 
-                                            style={style}
+                                            style={imageStyle}
                                             onClick={(() => { fileClick(value.path) })}
                                             source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
                                         />
-                                    </>
+                                    </TouchableOpacity>
                                 )
                             } else {
                                 return(
-                                    <>
+                                    <TouchableOpacity>
                                         <Video
                                             className="video" 
                                             key={value.path + index + 'not-reply'} 
-                                            style={style}
+                                            style={imageStyle}
                                             onClick={(() => { fileClick(value.path) })}
                                             source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
                                         />
-                                    </>
+                                    </TouchableOpacity>
                                 )
                             }
                         } else {
@@ -86,11 +90,23 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                         target="_blank" rel="noopener noreferrer" 
                                         title={value.name}
                                         key={value.path + index + 'not-reply'} 
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            backgroundColor: '#393939', 
+                                            paddingLeft: 10, 
+                                            paddingRight: 10,
+                                            paddingTop: 8,
+                                            paddingBottom: 8,
+                                            borderRadius: 6
+                                        }}
                                     >
-                                        <MaterialIcons name="description"/>
+                                        <View style={{backgroundColor: '#000', padding: 6, width: 30, height: 30, marginRight: 6, borderRadius: 15, alignItems: 'center', justifyContent: 'center'}}>
+                                            <MaterialIcons name="description" size={20} color={'#fff'}/>
+                                        </View>
                                         <View className="file-description">
-                                            <Text>{value.path.substring(21)}</Text>
-                                            <Text>{fileSize}</Text>
+                                            <Text style={{color: '#fff', fontWeight: '600'}}>{value.path.substring(21)}</Text>
+                                            <Text style={{color: globalStyles.colors.white_1}}>{fileSize}</Text>
                                         </View>
                                     </View>
                                 </>
@@ -110,7 +126,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                         var fileSize = fileSizeFormatter(fileObject.size, 2)
                         return(
                             fileObject &&
-                            <>
+                            <TouchableOpacity>
                                 <View
                                     className="file-wrapper" 
                                     href={`https://risala.codenoury.se/${fileObject.path.substring(3)}`} 
@@ -124,7 +140,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                         <Text>{fileSize}</Text>
                                     </View>
                                 </View>
-                            </>
+                            </TouchableOpacity>
                         )
                     })
                 }
@@ -142,48 +158,48 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                         //The file is an image
                         if(type === "image" || type === "video"){
 
-                            var style;
+                            var imageStyle;
                             var width = value.dimensions[0]
                             var heigth = value.dimensions[1]
                             var aspectRatio = width/heigth
                     
                             if(aspectRatio > 1.7 && aspectRatio < 1.8){ //16:9
-                                style = sixteenToNine
+                                imageStyle = sixteenToNine
                             } else if(aspectRatio === 1){
-                                style = oneToOne
+                                imageStyle = oneToOne
                             } else {
-                                style = nineToSixteen
+                                imageStyle = nineToSixteen
                             }
 
                             if(type === "image"){
                                 return(
-                                    <>
+                                    <TouchableOpacity>
                                         <Image 
                                             key={value.path} 
                                             onClick={(() => { fileClick(value.path) })}
-                                            style={style}
+                                            style={imageStyle}
                                             source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
                                         />
-                                    </>
+                                    </TouchableOpacity>
                                 )
                             } else {
                                 return(
-                                    <>
+                                    <TouchableOpacity>
                                         <Video
                                             className="video" 
                                             key={value.path} 
                                             onClick={(() => { fileClick(value.path) })}
-                                            style={style}
+                                            style={imageStyle}
                                             source={{uri: `https://risa.codenoury.se/${value.path.substring(3)}`}}
                                         />
-                                    </>
+                                    </TouchableOpacity>
                                 )
                             }
                         } else {
                             var fileSize = fileSizeFormatter(value.size, 2)
                             //The file is a file or a non-image, treat it as a file
                             return(
-                                <>
+                                <TouchableOpacity>
                                     <View 
                                         className="file-wrapper" 
                                         href={`https://risala.codenoury.se/${value.path.substring(3)}`} 
@@ -197,7 +213,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             <Text>{fileSize}</Text>
                                         </View>
                                     </View>
-                                </>
+                                </TouchableOpacity>
                             )
                         }
                     })
@@ -215,7 +231,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                         var fileSize = fileSizeFormatter(fileObject.size, 2)
                         return(
                             fileObject &&
-                            <>
+                            <TouchableOpacity>
                                 <View 
                                     className="file-wrapper" 
                                     href={`https://risala.codenoury.se/${fileObject.path.substring(3)}`} 
@@ -229,7 +245,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                         <Text>{fileSize}</Text>
                                     </View>
                                 </View>
-                            </>
+                            </TouchableOpacity>
                         )
                     })
                 }

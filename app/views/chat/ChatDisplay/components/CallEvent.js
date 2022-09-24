@@ -1,9 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { chatReducer } from "../../../../src/redux/chat";
 import removeEmojis from "../functions/removeEmojis";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+
+import { globalStyles } from "../../../../src/styles/globalStyles";
 
 export default function CallEvent({ value, index, locale, array, USER_DATA, current }){
     const dispatch = useDispatch();
@@ -86,6 +88,46 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
         }
     }
 
+    const style = StyleSheet.create({
+        listWrapper: {
+            width: '100%', 
+            justifyContent: isSender ? 'flex-end' : 'flex-start', 
+            flexDirection: 'row', 
+            alignItems: 'center'
+        },
+        callObjectWrapper: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginLeft: (nextMatch && !isSender) ? 40 : 0,
+            marginBottom: nextMatch ? 4 : 0,
+            backgroundColor: '#ffffff1a',
+            borderRadius: 8,
+            width: 150,
+            paddingTop: 10,
+            paddingBottom: 10,
+            paddingLeft: 12,
+            paddingRight: 12
+        },
+        callIcon: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: isMissed ? globalStyles.colors.red : '#000',
+            width: 30,
+            height: 30,
+            borderRadius: 15
+        },
+        smallIcon: {
+            position: 'absolute',
+            top: 6,
+            right: 6,
+        },
+        smallIconVideo: {
+            position: 'absolute',
+            zIndex: 10,
+            right: 11,
+        }
+    })
+
     return(
         <View
             id={value.message_id}
@@ -95,44 +137,48 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
             key={value.message_id}
             message_id={value.message_id}
             file={null}
+            style={style.listWrapper}
         >
             {
                 (!nextMatch && !isSender) &&
-                <Image source={{uri: counter.profile_picture ? counter.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                <Image 
+                    style={{width: 30, height: 30, borderRadius: 15, marginRight: 10}}
+                    source={{uri: counter.profile_picture ? `https://risala.codenoury.se/${counter.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                />
             }
             <View 
                 className="call-object-wrapper"
-                style={{marginLeft: (!nextMatch && !isSender) ? "0px" : null}}
+                style={style.callObjectWrapper}
             >
                 {
                     (isSender) ?
                     <>
                         {
                             (infoObject.purpose === "call" && !isMissed) &&
-                            <View className="event-icon">
-                                <MaterialIcons name="call-made" />
-                                <MaterialIcons name="call" />
+                            <View className="event-icon" style={style.callIcon}>
+                                <MaterialIcons name="call-made" size={10} color={'#fff'} style={style.smallIcon}/>
+                                <MaterialIcons name="call" size={20} color={'#fff'}/>
                             </View>
                         }
                         {
                             (infoObject.purpose === "call" && isMissed) &&
-                            <View className="event-icon missed">
-                                <MaterialIcons name="close"/>
-                                <MaterialIcons name="call"/>
+                            <View className="event-icon missed" style={style.callIcon}>
+                                <MaterialIcons name="close" size={10} color={'#fff'} style={style.smallIcon}/>
+                                <MaterialIcons name="call" size={20} color={'#fff'}/>
                             </View>
                         }
                         {
                             (infoObject.purpose === "video" && !isMissed) &&
-                            <View className="event-icon video">
-                                <MaterialIcons name="call_made"/>
-                                <MaterialIcons name="videocam"/>
+                            <View className="event-icon video" style={style.callIcon}>
+                                <MaterialIcons name="call_made" size={10} color={'#fff'} style={style.smallIcon}/>
+                                <MaterialIcons name="videocam" size={20} color={'#fff'}/>
                             </View>
                         }
                         {
                             (infoObject.purpose === "video" && isMissed) &&
-                            <View className="event-icon video missed">
-                                <MaterialIcons name="close" />
-                                <MaterialIcons name="videocam" />
+                            <View className="event-icon video missed" style={style.callIcon}>
+                                <MaterialIcons name="close" size={10} color={'#000'} style={style.smallIcon}/>
+                                <MaterialIcons name="videocam" size={20} color={'#fff'}/>
                             </View>
                         }
                     </>
@@ -140,36 +186,41 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
                     <>
                         {
                             (infoObject.purpose === "call" && !isMissed) &&
-                            <View className="event-icon">
-                                <MaterialIcons name="call-received" />
-                                <MaterialIcons name="call" />
+                            <View className="event-icon" style={style.callIcon}>
+                                <MaterialIcons name="call-received" size={10} color={'#fff'} style={style.smallIcon}/>
+                                <MaterialIcons name="call" size={20} color={'#fff'}/>
                             </View>
                         }
                         {
                             (infoObject.purpose === "call" && isMissed) &&
-                            <View className="event-icon missed">
-                                <MaterialIcons name="close" />
-                                <MaterialIcons name="call" />
+                            <View className="event-icon missed" style={style.callIcon}>
+                                <MaterialIcons name="close" size={10} color={'#fff'} style={style.smallIcon}/>
+                                <MaterialIcons name="call" size={20} color={'#fff'}/>
                             </View>
                         }
                         {
                             (infoObject.purpose === "video" && !isMissed) &&
-                            <View className="event-icon video">
-                                <MaterialIcons name="call-received" />
-                                <MaterialIcons name="videocam" />
+                            <View className="event-icon video" style={style.callIcon}>
+                                <MaterialIcons 
+                                    name="call-received" 
+                                    size={12} 
+                                    color={globalStyles.colors.black} 
+                                    style={style.smallIconVideo}
+                                />
+                                <MaterialIcons name="videocam" size={20} color={'#fff'}/>
                             </View>
                         }
                         {
                             (infoObject.purpose === "video" && isMissed) &&
-                            <View className="event-icon video missed">
-                                <MaterialIcons name="close" />
-                                <MaterialIcons name="videocam" />
+                            <View className="event-icon video missed" style={style.callIcon}>
+                                <MaterialIcons name="close" size={10} color={globalStyles.colors.red} style={style.smallIconVideo}/>
+                                <MaterialIcons name="videocam" size={20} color={'#fff'}/>
                             </View>
                         }
                     </>
                 }
-                <View className="event-info">
-                    <Text>
+                <View className="event-info" style={{marginLeft: 20}}>
+                    <Text style={{color: '#fff', fontWeight: '700'}}>
                         {
                             (infoObject.purpose === "call" && !isMissed) &&
                             "Audio call"
@@ -183,7 +234,7 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
                             "Missed call"
                         }
                     </Text>
-                    <Text>
+                    <Text style={{color: globalStyles.colors.white_1}}>
                         {
                             infoObject.isMissed &&
                             value.timestamp.substring(11,16)
