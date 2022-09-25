@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { globalStyles } from "../../../../src/styles/globalStyles";
 
 export default function EventSeparator({ value, index, locale }){
     const USER_DATA = useSelector((state) => state.chatReducer.value.USER_DATA)
@@ -30,21 +31,23 @@ export default function EventSeparator({ value, index, locale }){
 
             return (
                 <>
-                    <li className="separator change" message_id={value.message_id}>
+                    <View style={style.eventWrapper} className="separator change" message_id={value.message_id}>
+                        <Text style={style.text}>
                         {
                             locale === "en" ?
                             `${changer} have choosen the emoji ${value.text}`
                             :
                             `${changer} har valt emojin ${value.text}`
                         }
-                    </li>
+                        </Text>
+                    </View>
                 </>
             )
         } else if(value.text === "Admin") {
             return (
                 <>
-                    <View className="separator change" message_id={value.message_id}>
-                        <Text>
+                    <View style={style.eventWrapper} className="separator change" message_id={value.message_id}>
+                        <Text style={style.text}>
                         {
                             locale === "en" ?
                             `${value.reciever_id} is now the admin of the group`
@@ -68,8 +71,8 @@ export default function EventSeparator({ value, index, locale }){
             }
             return (
                 <>
-                    <View className="separator change" message_id={value.message_id}>
-                        <Text>
+                    <View className="separator change" message_id={value.message_id} style={style.eventWrapper}>
+                        <Text style={style.text}>
                         {
                             locale === "en" ?
                             `${changer} removed ${value.reciever_id} from the group`
@@ -101,8 +104,9 @@ export default function EventSeparator({ value, index, locale }){
                     <View 
                         className="separator change" 
                         message_id={value.message_id}  
+                        style={style.eventWrapper}
                     >
-                        <Text>
+                        <Text style={style.text}>
                         {
                             locale === "en" ?
                             `${changer} added ${reciever} to the group`
@@ -127,8 +131,9 @@ export default function EventSeparator({ value, index, locale }){
                     <View 
                         className="separator change" 
                         message_id={value.message_id}
+                        style={style.eventWrapper}
                     >
-                        <Text>
+                        <Text style={style.text}>
                         {
                             locale === "en" ?
                             `${changer} changed the group name to ${value.text}`
@@ -161,8 +166,9 @@ export default function EventSeparator({ value, index, locale }){
                     <View 
                         className="separator change" 
                         message_id={value.message_id}
+                        style={style.eventWrapper}
                     >
-                        <Text>
+                        <Text style={style.text}>
                         {
                             locale === "en" ?
                             `${changer} have given ${originalName} the nickname ${nickname}`
@@ -187,8 +193,9 @@ export default function EventSeparator({ value, index, locale }){
                 <View 
                     className="separator change" 
                     message_id={value.message_id}
+                    style={style.eventWrapper}
                 >
-                    <Text>
+                    <Text style={style.text}>
                     {
                         locale === "en" ?
                         `${changer} has changed the theme to`
@@ -204,3 +211,16 @@ export default function EventSeparator({ value, index, locale }){
         return null
     }
 }
+
+const style = StyleSheet.create({
+    eventWrapper: {
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10
+    },
+    text: {
+        color: globalStyles.colors.white_1,
+        textAlign: 'center'
+    }
+})

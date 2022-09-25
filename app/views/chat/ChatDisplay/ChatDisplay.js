@@ -218,13 +218,19 @@ export default function ChatDisplay({ navigation }) {
                         (group && !loading) &&
                         <TouchableOpacity 
                             onPress={conversationSettings}
-                            style={{flexDirection: 'row'}}
+                            style={{flexDirection: 'row', alignItems: 'center'}}
                         >
-                            <View>
-                                <Image source={{uri: group[0].profile_picture ? `https://risala.codenoury.se/${group[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
-                                <Image source={{uri: group[1].profile_picture ? `https://risala.codenoury.se/${group[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                            <View style={{height: 40, width: 40}}>
+                                <Image
+                                    style={{width: 30, height: 30, borderRadius: 15, position: 'absolute', top: 0, left: 10}} 
+                                    source={{uri: group[0].profile_picture ? `https://risala.codenoury.se/${group[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                                />
+                                <Image
+                                    style={{width: 30, height: 30, borderRadius: 15, position: 'absolute', bottom: 0, borderWidth: 1, borderColor: '#000'}} 
+                                    source={{uri: group[1].profile_picture ? `https://risala.codenoury.se/${group[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                                />
                             </View>
-                            <Text>
+                            <Text style={style.chatTopName}>
                                 {
                                     (group && !alias) &&
                                     group.map((e, i, row) => {

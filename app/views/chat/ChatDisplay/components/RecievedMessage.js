@@ -396,9 +396,9 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                     <>
                         {
                             userNickname ?
-                            <Text className="sender-name">{userNickname}</Text>
+                            <Text className="sender-name" style={{color: '#fff'}}>{userNickname}</Text>
                             :
-                            <Text className="sender-name">{sender.firstname}</Text>
+                            <Text className="sender-name" style={{color: '#fff'}}>{sender.firstname}</Text>
                         }
                     </>
                 }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Text, View, TouchableOpacity, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer } from "../../../src/redux/chat";
 import useLocale from "../../../src/lib/useLocale";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 export default function GroupMembers({group, admin, setAdmin, options, setOptions, selected, setSelected}){
     const dispatch = useDispatch();
@@ -52,97 +54,89 @@ export default function GroupMembers({group, admin, setAdmin, options, setOption
     }
 
     return(
-        <div className={expanded ? "options-wrapper-wrapper expanded" : "options-wrapper-wrapper"}>
-            <div 
+        <View className={expanded ? "options-wrapper-wrapper expanded" : "options-wrapper-wrapper"}>
+            <View
                 className="options-wrapper-wrapper-header"
                 onClick={expandFunction} 
             >
-                <span>{locale === "en" ? "Chat members" : "Chattmedlemmar"}</span>
-                <i className="material-icons more">expand_more</i>
-                <i className="material-icons less">expand_less</i>
-            </div>
-            <div className="options-wrapper">
+                <Text>{locale === "en" ? "Chat members" : "Chattmedlemmar"}</Text>
+                <MaterialIcons name="expand-more" className="material-icons more" />
+                <MaterialIcons name="expand-less" className="material-icons less" />
+            </View>
+            <View className="options-wrapper">
                 {
                     group &&
                     group.map((value, index) => {
                         return(
-                            <div 
+                            <View
                                 className="group-member"
                                 key={index}
                             >
-                                <div className="user-info-wrapper">
-                                    <figure>
-                                        <img src={value.profile_picture ? value.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                                    </figure>
-                                    <p>
-                                        <span>
-                                            {value.firstname + ' ' + value.lastname}
-                                        </span>
+                                <View className="user-info-wrapper">
+                                    <Image soure={{uri: value.profile_picture ? `https://risala.codenoury.se/${value.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                                    <View>
+                                        <Text>{value.firstname + ' ' + value.lastname}</Text>
                                         {
                                             current.roles &&
                                             <>
                                                 {
                                                     current.roles.creator === value.id &&
-                                                    <span>{locale === "en" ? "Group creator" : "Gruppskapare"}</span>
+                                                    <Text>{locale === "en" ? "Group creator" : "Gruppskapare"}</Text>
                                                 }
                                                 {
                                                     (current.roles.admin === value.id && current.roles.creator !== value.id) &&
-                                                    <span>Admin</span>
+                                                    <Text>Admin</Text>
                                                 }
                                                 {
                                                     current.roles.admin !== value.id && current.roles.creator !== value.id &&
-                                                    <span>{locale === "en" ? "Member" : "Gruppmedlem"}</span>
+                                                    <Text>{locale === "en" ? "Member" : "Gruppmedlem"}</Text>
                                                 }
                                             </>
                                         }
-                                    </p>
-                                </div>
-                                <div className="member-options" onClick={((e) => { moreOptionSelect(value, e) })}>
-                                    <i className="material-icons">more_horiz</i>
-                                </div>
-                            </div>
+                                    </View>
+                                </View>
+                                <View className="member-options" onClick={((e) => { moreOptionSelect(value, e) })}>
+                                    <MaterialIcons name="more-horiz" className="material-icons" />
+                                </View>
+                            </View>
                         )
                     })
                 }
-                <div className="group-member">
-                    <div className="user-info-wrapper">
-                        <figure>
-                            <img src={USER_DATA.profile_picture ? USER_DATA.profile_picture : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                        </figure>
-                        <p>
-                            <span>
-                                {USER_DATA.firstname + ' ' + USER_DATA.lastname}
-                            </span>
+                <View className="group-member">
+                    <View className="user-info-wrapper">
+                        <Image source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                        <View>
+                            <Text>{USER_DATA.firstname + ' ' + USER_DATA.lastname}</Text>
                             {
                                 current.roles &&
                                 <>
                                     {
                                         current.roles.creator === USER_DATA.account_id &&
-                                        <span>{locale === "en" ? "Group creator" : "Gruppskapare"}</span>
+                                        <Text>{locale === "en" ? "Group creator" : "Gruppskapare"}</Text>
                                     }
                                     {
                                         (current.roles.admin === USER_DATA.account_id && current.roles.creator !== USER_DATA.account_id) &&
-                                        <span>Admin</span>
+                                        <Text>Admin</Text>
                                     }
                                     {
                                         current.roles.admin !== USER_DATA.account_id && current.roles.creator !== USER_DATA.account_id &&
-                                        <span>{locale === "en" ? "Member" : "Gruppmedlem"}</span>
+                                        <Text>{locale === "en" ? "Member" : "Gruppmedlem"}</Text>
                                     }
                                 </>
                             }
-                        </p>
-                    </div>
-                    <div className="member-options" onClick={((e) => { moreOptionSelect(USER_DATA, e) })}>
-                        <i className="material-icons">more_horiz</i>
-                    </div>
-                </div>
-                <div className="settings-option" onClick={addMember}>
-                    <div className="add">
-                        <i className="material-icons">add</i>
-                    </div>
-                    <span>{locale === "en" ? "Add members" : "Lägg till personer"}</span>
-                </div>
-            </div>
-        </div>
+                        </View>
+                    </View>
+                    <View className="member-options" onClick={((e) => { moreOptionSelect(USER_DATA, e) })}>
+                        <MaterialIcons name="more-horiz" className="material-icons" />
+                    </View>
+                </View>
+                <View className="settings-option" onClick={addMember}>
+                    <View className="add">
+                        <MaterialIcons name="add" className="material-icons" />
+                    </View>
+                    <Text>{locale === "en" ? "Add members" : "Lägg till personer"}</Text>
+                </View>
+            </View>
+        </View>
     )
 }

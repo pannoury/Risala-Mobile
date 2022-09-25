@@ -318,7 +318,7 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                 {
                     (only_emoji === "" && value.text !== "") &&
                     <View className="message emoji">
-                        <Text>{value.text}</Text>
+                        <Text style={{fontSize: 40}}>{value.text}</Text>
                     </View>
                 }
                 {

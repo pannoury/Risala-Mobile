@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { View, ScrollView, Text } from "react-native";
+import { View, ScrollView, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { chatReducer } from "../../../src/redux/chat";
 import fileSizeFormatter from "../../../src/lib/fileSizeFormatter";
 import useLocale from "../../../src/lib/useLocale";
+import { Video, AVPlaybackStatus } from 'expo-av';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 //Components
 import GroupMembers from './GroupMembers';
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ChatSettings({}){
+export default function ChatSettings({ navigation }){
     const dispatch = useDispatch();
     const locale = useLocale();
     const current = useSelector((state) => state.chatReducer.value.current)
@@ -79,18 +81,18 @@ export default function ChatSettings({}){
         }
     }, [current, COUNTER_DATA])
 
-    useEffect(() => {
-        if(options){
-            
-            window.addEventListener('click', windowClick)
-        } else {
-            window.removeEventListener('click', windowClick)
-        }
-
-        return(() => {
-            window.removeEventListener('click', windowClick)
-        })
-    }, [options])
+    //useEffect(() => {
+    //    if(options){
+    //        
+    //        window.addEventListener('click', windowClick)
+    //    } else {
+    //        window.removeEventListener('click', windowClick)
+    //    }
+    //
+    //    return(() => {
+    //        window.removeEventListener('click', windowClick)
+    //    })
+    //}, [options])
 
     useEffect(() => {
         if(selected && USER_DATA){
@@ -156,8 +158,35 @@ export default function ChatSettings({}){
         setSelected(USER_DATA)
     }
 
+    const style = StyleSheet.create({
+        wrapper: {
+            height: '100%',
+            backgroundColor: '#141414',
+        },
+        top: {
+            height: 50,
+            flexDirection: 'row'
+        },
+        overView: {
+            alignItems: 'center',
+            height: 120
+        },
+        optionsButton: {
+            paddingLeft: 12,
+            paddingTop: 12,
+            paddingBottom: 12,
+            paddingRight: 12,
+            backgroundColor: '#181818'
+        }
+    })
+
     return(
-        <>
+        <SafeAreaView style={style.wrapper}>
+            <View style={style.top}>
+                <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                    <MaterialIcons name="chevron-left" size={30} color={chat_settings.color}/>
+                </TouchableOpacity>
+            </View>
             {
                 current &&
                 <View className={settings === true ? "chat-settings visible" : "chat-settings"}>
@@ -168,17 +197,13 @@ export default function ChatSettings({}){
                 {
                     (!isMediaFiles && !mediaFilesPurpose && !isLoading) &&
                     <>
-                        <View className="conversation-overview">
+                        <View style={style.overView} className="conversation-overview">
                             {
                                 group ?
                                 <>
                                     <View className="group-figure">
-                                        <figure>
-                                            <img src={group[0].profile_picture ? `${group[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                                        </figure>
-                                        <figure>
-                                            <img src={group[1].profile_picture ? `${group[1].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                                        </figure>
+                                        <Image source={{uri: group[0].profile_picture ? `https://risala.codenoury.se/${group[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                                        <Image source={{uri: group[1].profile_picture ? `https://risala.codenoury.se/${group[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                                     </View>
                                     <Text>
                                         {
@@ -193,7 +218,7 @@ export default function ChatSettings({}){
                                         }
                                         {
                                             (group && alias) &&
-                                            <>{alias}</>
+                                            <Text style={{color: '#fff'}}>{alias}</Text>
                                         }
                                     </Text>
                                 </>
@@ -202,21 +227,24 @@ export default function ChatSettings({}){
                                     {
                                         COUNTER_DATA[0] &&
                                         <>
-                                            <figure>
-                                                <img src={(current.members && current.members.length > 0) ? COUNTER_DATA[0].profile_picture ? COUNTER_DATA[0].profile_picture : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}/>
-                                            </figure>
+                                            <Image 
+                                                style={{width: 80, height: 80, borderRadius: 40}}
+                                                source={{uri: COUNTER_DATA ? COUNTER_DATA[0].profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png" }}
+                                            />
                                             {
                                                 nickname ?
-                                                <Text>{nickname}</Text>
+                                                <Text style={{color: '#fff', marginTop: 10, fontSize: 22, fontWeight: '600'}}>{nickname}</Text>
                                                 :
-                                                <Text>{ (current.members && current.members.length > 0) ? COUNTER_DATA[0].firstname + ' ' + COUNTER_DATA[0].lastname : "Participant"}</Text>
+                                                <Text style={{color: '#fff', marginTop: 10, fontSize: 22, fontWeight: '600'}}>{ (current.members && current.members.length > 0) ? COUNTER_DATA[0].firstname + ' ' + COUNTER_DATA[0].lastname : "Participant"}</Text>
                                             }
                                         </>
                                     }
                                 </>
                             }
                         </View>
-                        <View className="settings-list">
+                        <View className="settings-list" 
+                            style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%'}}
+                        >
                             <CustomiseChat/>
                             <MediaAndFilesDropDown/>
                             {
@@ -257,29 +285,21 @@ export default function ChatSettings({}){
                         className="member-settings"
                         style={{top: `${options + 20}px`}}
                     >
-                        <Text>
-                            {locale === "en" ? "Send a message" : "Skicka meddelande"}
-                        </Text>
+                        <Text>{locale === "en" ? "Send a message" : "Skicka meddelande"}</Text>
                         {
                             admin &&
                             <>
-                            <View className="line"></View>
-                                <Text
-                                    onClick={makeAdmin}
-                                >
+                                <View className="line"></View>
+                                <Text onClick={makeAdmin}>
                                     {locale === "en" ? "Make admin" : "Gör till administratör"}
                                 </Text>
                                 {
                                     isSelf ?
-                                    <Text
-                                        onClick={removeUser}
-                                    >
+                                    <Text onClick={removeUser}>
                                         {locale === "en" ? "Leave Group" : "Lämna Gruppen"}
                                     </Text>
                                     :
-                                    <Text 
-                                        onClick={removeUser}
-                                    >
+                                    <Text onClick={removeUser}>
                                         {locale === "en" ? "Remove member" : "Ta bort medlem"}
                                     </Text>
                                 }
@@ -289,9 +309,7 @@ export default function ChatSettings({}){
                             isSelf && !admin &&
                             <>
                                 <View className="line"></View>
-                                <Text
-                                    onClick={removeUser}
-                                >
+                                <Text onClick={removeUser}>
                                     {locale === "en" ? "Leave Group" : "Lämna Gruppen"}
                                 </Text>
                             </>
@@ -300,7 +318,7 @@ export default function ChatSettings({}){
                 }
                 </View>
             }
-        </>
+        </SafeAreaView>
     )
 
     function MediaAndFilesWindow(){
@@ -320,14 +338,15 @@ export default function ChatSettings({}){
         return(
             <>
                 <View  className="media-files-top">
-                    <i 
+                    <MaterialIcons 
+                        name="keyboard-backspace"
                         className="material-icons"
                         onClick={(() => {
                             setMediaFiles(false)
                             setMediaFilesPurpose(undefined)
                         })}
-                    >keyboard_backspace</i>
-                    {locale === "en" ? "Media and Files" : "Media och Filer"}
+                    />
+                    <Text>{locale === "en" ? "Media and Files" : "Media och Filer"}</Text>
                 </View>
                 <View className="media-files-selection">
                     <View 
@@ -338,7 +357,7 @@ export default function ChatSettings({}){
                             setMediaFilesPurpose("media")
                         })}
                     >
-                        Media
+                        <Text>Media</Text>
                     </View>
                     <View 
                         className={mediaFilesPurpose === "files" ? "media-files-option selected" : "media-files-option"} 
@@ -348,7 +367,7 @@ export default function ChatSettings({}){
                             setMediaFilesPurpose("files")
                         })}
                     >
-                        {locale === "en" ? "Files" : "Filer"}
+                        <Text>{locale === "en" ? "Files" : "Filer"}</Text>
                     </View>
                 </View>
                 <View className={mediaFilesPurpose === "files" ? "media-files-display files" : "media-files-display"}>
@@ -368,7 +387,7 @@ export default function ChatSettings({}){
                                             style={{height: `${widthStyle}px`}}
                                             onClick={(() => { fileClick(value.path) })}
                                         >
-                                            <video src={`../${value.path.substring(3)}`}/>
+                                            <Video src={`../${value.path.substring(3)}`}/>
                                         </View>
                                     )
                                 } else {
@@ -379,7 +398,7 @@ export default function ChatSettings({}){
                                             style={{height: `${widthStyle}px`}}
                                             onClick={(() => { fileClick(value.path) })}
                                         >
-                                            <img src={`../${value.path.substring(3)}`}/>
+                                            <Image source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}/>
                                         </View>
                                     )
                                 }
@@ -394,7 +413,7 @@ export default function ChatSettings({}){
 
                             if(window.location.hostname === "localhost"){
                                 return(
-                                    <a 
+                                    <TouchableOpacity 
                                         className="file-row"
                                         key={value.path}
                                         href={`../${value.path.substring(3)}`} 
@@ -403,16 +422,14 @@ export default function ChatSettings({}){
                                     >
                                         <MaterialIcons name="description"/>
                                         <View className="file-description">
-                                            <Text>
-                                                {name.length > 20 ? `${name.substring(0,20)}...` : name}
-                                            </Text>
+                                            <Text>{name.length > 20 ? `${name.substring(0,20)}...` : name}</Text>
                                             <Text>{fileSize}</Text>
                                         </View>
-                                    </a>
+                                    </TouchableOpacity>
                                 )
                             } else{
                                 return(
-                                    <a 
+                                    <TouchableOpacity 
                                         className="file-row"
                                         key={value.path}
                                         href={`https://risala.codenoury.se/${value.path.substring(3)}`} 
@@ -424,7 +441,7 @@ export default function ChatSettings({}){
                                             <Text>{name}</Text>
                                             <Text>{fileSize}</Text>
                                         </View>
-                                    </a>
+                                    </TouchableOpacity>
                                 )
                             }
                         })
@@ -437,14 +454,12 @@ export default function ChatSettings({}){
     //Store dropdown options
     function CustomiseChat(){
         return(
-            <View className="options-wrapper-wrapper">
+            <View style={{marginTop: 40, width: '80%', marginLeft: 'auto'}} className="options-wrapper-wrapper">
                 <View 
                     className="options-wrapper-wrapper-header"
                     onClick={settingsOptionClick} 
                 >
-                    <Text>{locale === "en" ? "Customise Chat" : "Anpassa Chatt"}</Text>
-                    <i className="material-icons more">expand_more</i>
-                    <i className="material-icons less">expand_less</i>
+                    <Text style={{color: '#fff'}}>{locale === "en" ? "Customise Chat" : "Anpassa Chatt"}</Text>
                 </View>
                 <View className="options-wrapper">
                     {
@@ -456,26 +471,31 @@ export default function ChatSettings({}){
                             <Text>{locale === "en" ? "Change group name" : "Ändra Chattnamn"}</Text>
                         </View>
                     }
-                    <View className="settings-option" onClick={(() => { chatWindow('change_color') })}>
+                    <View 
+                        style={style.optionsButton}
+                        className="settings-option" 
+                        onClick={(() => { chatWindow('change_color') })}
+                    >
                         <View
-                            className="settings-color" style={chat_settings.color ? {backgroundColor: chat_settings.color} : {backgroundColor: '#d39400'}}
+                            className="settings-color" 
+                            style={chat_settings.color ? {backgroundColor: chat_settings.color} : {backgroundColor: '#d39400'}}
                         >
                             <View className="dot"></View>
                         </View>
-                        <Text>{locale === "en" ? "Change Theme" : "Ändra Tema"}</Text>
+                        <Text style={{color: '#fff'}}>{locale === "en" ? "Change Theme" : "Ändra Tema"}</Text>
                     </View>
                     <View className="settings-option" onClick={(() => { chatWindow('change_emoji') })}>
                         {
                             chat_settings.emoji &&
-                            <View className="emoji">
+                            <Text className="emoji">
                                 {chat_settings.emoji}
-                            </View>
+                            </Text>
                         }
                         <Text>{locale === "en" ? "Change Emoji" : "Byt Emoji"}</Text>
                     </View>
                     <View className="settings-option" onClick={(() => { chatWindow('change_nickname') })}>
                         <View className="settings-color">
-                            Aa
+                            <Text>Aa</Text>
                         </View>
                         <Text>{locale === "en" ? "Change nickname" : "Ändra Smeknamn"}</Text>
                     </View>
@@ -492,8 +512,8 @@ export default function ChatSettings({}){
                     onClick={settingsOptionClick} 
                 >
                     <Text>{locale === "en" ? "Media and Files" : "Mediaobjekt och Filer"}</Text>
-                    <i className="material-icons more">expand_more</i>
-                    <i className="material-icons less">expand_less</i>
+                    <MaterialIcons name="expand-more" className="material-icons more" />
+                    <MaterialIcons name="expand-less" className="material-icons less" />
                 </View>
                 <View className="options-wrapper">
                     <View 
@@ -503,9 +523,7 @@ export default function ChatSettings({}){
                             setMediaFilesPurpose("media")
                         })}
                     >
-                        <View>
-                            <MaterialIcons name="image"/>
-                        </View>
+                        <MaterialIcons name="image"/>
                         <Text>{locale === "en" ? "Media" : "Media"}</Text>
                     </View>
                     <View 
@@ -515,9 +533,7 @@ export default function ChatSettings({}){
                             setMediaFilesPurpose("files")
                         })}
                     >
-                        <View>
-                            <MaterialIcons name="description"/>
-                        </View>
+                        <MaterialIcons name="description"/>
                         <Text>{locale === "en" ? "Files" : "Filer"}</Text>
                     </View>
                 </View>
