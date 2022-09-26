@@ -161,7 +161,7 @@ export default function ChatSettings({ navigation }){
     const style = StyleSheet.create({
         wrapper: {
             height: '100%',
-            backgroundColor: '#141414',
+            backgroundColor: '#000',
         },
         top: {
             height: 50,
@@ -205,7 +205,7 @@ export default function ChatSettings({ navigation }){
                                         <Image source={{uri: group[0].profile_picture ? `https://risala.codenoury.se/${group[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                                         <Image source={{uri: group[1].profile_picture ? `https://risala.codenoury.se/${group[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                                     </View>
-                                    <Text>
+                                    <Text style={{color: '#fff'}}>
                                         {
                                             (group && !alias) &&
                                             group.map((e, i, row) => {
@@ -285,21 +285,21 @@ export default function ChatSettings({ navigation }){
                         className="member-settings"
                         style={{top: `${options + 20}px`}}
                     >
-                        <Text>{locale === "en" ? "Send a message" : "Skicka meddelande"}</Text>
+                        <Text style={{color: '#fff'}}>{locale === "en" ? "Send a message" : "Skicka meddelande"}</Text>
                         {
                             admin &&
                             <>
                                 <View className="line"></View>
-                                <Text onClick={makeAdmin}>
+                                <Text style={{color: '#fff'}} onClick={makeAdmin}>
                                     {locale === "en" ? "Make admin" : "Gör till administratör"}
                                 </Text>
                                 {
                                     isSelf ?
-                                    <Text onClick={removeUser}>
+                                    <Text style={{color: '#fff'}} onClick={removeUser}>
                                         {locale === "en" ? "Leave Group" : "Lämna Gruppen"}
                                     </Text>
                                     :
-                                    <Text onClick={removeUser}>
+                                    <Text style={{color: '#fff'}} onClick={removeUser}>
                                         {locale === "en" ? "Remove member" : "Ta bort medlem"}
                                     </Text>
                                 }
@@ -309,7 +309,7 @@ export default function ChatSettings({ navigation }){
                             isSelf && !admin &&
                             <>
                                 <View className="line"></View>
-                                <Text onClick={removeUser}>
+                                <Text style={{color: '#fff'}} onClick={removeUser}>
                                     {locale === "en" ? "Leave Group" : "Lämna Gruppen"}
                                 </Text>
                             </>
@@ -357,7 +357,7 @@ export default function ChatSettings({ navigation }){
                             setMediaFilesPurpose("media")
                         })}
                     >
-                        <Text>Media</Text>
+                        <Text style={{color: '#fff'}}>Media</Text>
                     </View>
                     <View 
                         className={mediaFilesPurpose === "files" ? "media-files-option selected" : "media-files-option"} 
@@ -367,7 +367,7 @@ export default function ChatSettings({ navigation }){
                             setMediaFilesPurpose("files")
                         })}
                     >
-                        <Text>{locale === "en" ? "Files" : "Filer"}</Text>
+                        <Text style={{color: '#fff'}}>{locale === "en" ? "Files" : "Filer"}</Text>
                     </View>
                 </View>
                 <View className={mediaFilesPurpose === "files" ? "media-files-display files" : "media-files-display"}>
@@ -422,8 +422,8 @@ export default function ChatSettings({ navigation }){
                                     >
                                         <MaterialIcons name="description"/>
                                         <View className="file-description">
-                                            <Text>{name.length > 20 ? `${name.substring(0,20)}...` : name}</Text>
-                                            <Text>{fileSize}</Text>
+                                            <Text style={{color: '#fff'}}>{name.length > 20 ? `${name.substring(0,20)}...` : name}</Text>
+                                            <Text style={{color: '#fff'}}>{fileSize}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 )

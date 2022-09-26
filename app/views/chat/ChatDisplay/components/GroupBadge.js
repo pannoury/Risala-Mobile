@@ -30,10 +30,10 @@ export default function GroupBadge({ locale }){
                 return(
                     <View className="group-badge-wrapper">
                         <View className="group-figure">
-                            <Image source={{uri: others[0].profile_picture ? `${others[0].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
-                            <Image source={{uri: others[1].profile_picture ? `${others[1].profile_picture}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                            <Image source={{uri: others[0].profile_picture ? `https://risala.codenoury.se/${others[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                            <Image source={{uri: others[1].profile_picture ? `https://risala.codenoury.se/${others[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                         </View>
-                        <Text className="group-name">
+                        <Text style={{color: '#fff'}} className="group-name">
                             {
                                 !current.alias &&
                                 others.map((e,i, row) => {
@@ -47,7 +47,7 @@ export default function GroupBadge({ locale }){
                         </Text>
                         {
                             current.alias &&
-                            <Text className="group-name">{current.alias}</Text>
+                            <Text style={{color: '#fff'}} className="group-name">{current.alias}</Text>
                         }
                         <Text className="creator">{string}</Text>
                         <View className="group-chat-settings">

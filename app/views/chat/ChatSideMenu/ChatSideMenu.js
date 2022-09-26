@@ -114,7 +114,7 @@ export default function ChatSideMenu({ navigation }){
             dispatch(chatReducer({current: chats.find(e => e.id === chat_id)}))
         }
 
-        navigation.push('Display')
+        navigation.navigate('Display')
     }
 
     // Build some sort of algorithm

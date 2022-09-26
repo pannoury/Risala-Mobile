@@ -1,13 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, TextInput, Text } from "react-native";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import { View, TextInput, Text, TouchableOpacity, StyleSheet, Touchable } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer, arrayEmpty, objectAdd } from "../../../src/redux/chat";
 import sendMessage from "./functions/sendMessage";
+import { SocketContext } from "../../../src/lib/Socket";
+import { MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 
 import EmojiWindow          from "../EmojiWindow";
 import informationManager   from "../../../src/lib/informationManager";
 
-export default function ChatBottom({inputRef, socket}){
+export default function ChatBottom({inputRef}){
     const [inputValue, setInputValue] = useState('');
     const emoji_window = useRef(null)
     const fileInput = useRef();
@@ -19,6 +21,7 @@ export default function ChatBottom({inputRef, socket}){
     const [isTyping, setIsTyping] = useState(false) // <-- This is whether YOU are typing or not
 
     const dispatch = useDispatch();
+    const socket = useContext(SocketContext)
     const chat_bottom_height = useSelector((state) => state.chatReducer.value.chat_bottom_height)
     const newMessage = useSelector((state) => state.chatReducer.value.newMessage)
     const typing = useSelector((state) => state.chatReducer.value.typing)
@@ -64,8 +67,8 @@ export default function ChatBottom({inputRef, socket}){
         if(inputValue.length === 0 || inputValue === "" && chatHeight > 1){
             setChatHeight(1) //Counts number of rows for chatwindow
         } else {
-            var row = Math.floor((inputRef.current.scrollHeight / 20) > 6 ? 6 : inputRef.current.scrollHeight / 20)
-            setChatHeight(row)
+            //var row = Math.floor((inputRef.current.scrollHeight / 20) > 6 ? 6 : inputRef.current.scrollHeight / 20)
+            //setChatHeight(row)
         }
     }, [inputValue])
 
@@ -75,10 +78,6 @@ export default function ChatBottom({inputRef, socket}){
         setInputValue('')
         dispatch(arrayEmpty('files'))
     }, [current])
-
-    function inputChange(e){
-        setInputValue(e.target.value)
-    }
     
     function emojiSelect(e){
         setInputValue(`${inputRef.current.value}${e.target.textContent}`)
@@ -109,8 +108,8 @@ export default function ChatBottom({inputRef, socket}){
                         setInputValue('')
                     }
                 } else if(shift === true){
-                    var display = document.querySelector('.chat-display ul')
-                    display.scrollTop = display.scrollHeight
+                    //var display = document.querySelector('.chat-display ul')
+                    //display.scrollTop = display.scrollHeight
                 } else{
                     e.preventDefault()
                 }
@@ -133,7 +132,7 @@ export default function ChatBottom({inputRef, socket}){
     }, [reply, chatHeight, isFiles])
 
     useEffect(() => {
-        setInitialDisplayHeight(document.querySelector('.chat-main').clientHeight - 151)
+        //setInitialDisplayHeight(document.querySelector('.chat-main').clientHeight - 151)
     }, [current])
 
     function setHeight(){
@@ -153,16 +152,16 @@ export default function ChatBottom({inputRef, socket}){
 
         //
         if(totAdd === 50){
-            document.querySelector('.chat-display').style.height = `${initialDisplayHeight}px`
+            //document.querySelector('.chat-display').style.height = `${initialDisplayHeight}px`
         } else {
-            document.querySelector('.chat-display').style.height = `${(initialDisplayHeight - totAdd) + 70}px`
+            //document.querySelector('.chat-display').style.height = `${(initialDisplayHeight - totAdd) + 70}px`
         }
 
         dispatch(chatReducer({chat_bottom_height: totAdd}))
 
         setTimeout(() => {
-            var display = document.querySelector('.chat-display ul')
-            display.scrollTop = display.scrollHeight
+            //var display = document.querySelector('.chat-display ul')
+            //display.scrollTop = display.scrollHeight
         }, 10)
     }
 
@@ -205,17 +204,17 @@ export default function ChatBottom({inputRef, socket}){
                                 img.src = window.URL.createObjectURL(file)
                             } else if(type === 'video'){
                                 var url = URL.createObjectURL(file)
-                                let video = document.createElement('video')
-                                video.src = url
-                                video.onloadedmetadata = () => {
-                                    var width = video.videoWidth
-                                    var height = video.videoHeight
-
-                                    resolve({
-                                        dimensions: [width, height],
-                                        file: file
-                                    })
-                                }
+                                //let video = document.createElement('video')
+                                //video.src = url
+                                //video.onloadedmetadata = () => {
+                                //    var width = video.videoWidth
+                                //    var height = video.videoHeight
+                                //
+                                //    resolve({
+                                //        dimensions: [width, height],
+                                //        file: file
+                                //    })
+                                //}
                             }
                         })
                     }
@@ -301,10 +300,50 @@ export default function ChatBottom({inputRef, socket}){
         }))
     }
 
+    const style = StyleSheet.create({
+        wrapper: {
+            width: '100%',
+            height: 50,
+            justifyContent: 'flex-end'
+        },
+        messageBoxWrapper: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+        },
+        optionsWrapper: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 10
+        },
+        optionsStyle: {
+            marginRight: 10,
+            marginLeft: 10
+        },
+        messageBox: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: isTyping ? '90%' : '54%',
+            backgroundColor: '#141414',
+            paddingTop: 8,
+            paddingBottom: 8,
+            paddingLeft: 12,
+            paddingRight: 30,
+            borderRadius: 20,
+            marginRight: 20
+        },
+        input: {
+            height: `${chatHeight * 20}`, 
+            overflowY: chatHeight >= 6 ? 'auto' : 'hidden',
+            width: '100%',
+            color: '#fff'
+        }
+    })
+
     return(
         <View 
             className="chat-bottom"
-            style={{height: 100, width: '100%'}}
+            style={style.wrapper}
             //style={{height: `${chat_bottom_height}px`, paddingTop: reply.reply ? 0 : "10px"}}
         >
             {
@@ -342,27 +381,39 @@ export default function ChatBottom({inputRef, socket}){
                     </Text>
                 </View>
             }
-            <View className="message-box-wrapper">
-                <View className="message-insert-options">
-                    <View 
+            <View 
+                style={style.messageBoxWrapper}
+                className="message-box-wrapper"
+            >
+                <View className="message-insert-options" style={{flexDirection: 'row'}}>
+                    <TouchableOpacity style={style.optionsStyle}>
+                        <FontAwesome name="camera" color={chat_settings.color} size={24}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={style.optionsStyle}
                         className="attach-file"
                         onClick={fileClick}
                     >
-                        <i className="material-icons" style={{color: chat_settings.color}}>file_copy</i>
-                    </View>
-                    <input
+                        
+                        <FontAwesome name="image" color={chat_settings.color} size={24}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={style.optionsStyle}>
+                        <FontAwesome name="microphone" color={chat_settings.color} size={24} />
+                    </TouchableOpacity>
+                    <View
                         className="file-input" 
                         type="file"
                         style={{display: "none"}}
                         ref={fileInput}
                         onChange={fileClick}
                     >
-                    </input>
+                    </View>
                 </View>
                 <View 
                     className="message-box"
                     onClick={(() => inputRef.current.focus())}
-                    style={{height: isFiles ? `${((chatHeight - 1) * 20) + 110}px` : `${((chatHeight - 1) * 20) + 40}px`}}
+                    style={style.messageBox}
+                    //style={{height: isFiles ? `${((chatHeight - 1) * 20) + 110}px` : `${((chatHeight - 1) * 20) + 40}`}}
                 >
                     {
                         isFiles &&
@@ -382,10 +433,10 @@ export default function ChatBottom({inputRef, socket}){
                                                             removeFile(index, value)
                                                         })}
                                                     >
-                                                        <i className="material-icons">close</i>
+                                                        <MaterialIcons name="close" />
                                                     </View>
                                                     <View className="file" title={value.name}>
-                                                        <i className="material-icons">description</i>
+                                                        <MaterialIcons name="description" />
                                                     </View>
                                                 </View>
                                             )
@@ -398,11 +449,9 @@ export default function ChatBottom({inputRef, socket}){
                                                             removeFile(index, value)
                                                         })}
                                                     >
-                                                        <i className="material-icons">close</i>
+                                                        <MaterialIcons name="close" />
                                                     </View>
-                                                    <figure>
-                                                        <img src={URL.createObjectURL(value)}/>
-                                                    </figure>
+                                                    <Image source={URL.createObjectURL(value)}/>
                                                 </View>
                                             )
                                         } else if(type === "video"){
@@ -418,12 +467,10 @@ export default function ChatBottom({inputRef, socket}){
                                                             removeFile(index, value)
                                                         })}
                                                     >
-                                                        <i className="material-icons">close</i>
+                                                        <MaterialIcons name="close" />
                                                     </View>
-                                                    <i className="material-icons play">play_circle</i>
-                                                    <figure>
-                                                        <video src={URL.createObjectURL(file)}/>
-                                                    </figure>
+                                                    <MaterialIcons name="play-circle" className="material-icons play" />
+                                                    <video src={URL.createObjectURL(file)}/>
                                                 </View>
                                             )
                                         }
@@ -433,40 +480,34 @@ export default function ChatBottom({inputRef, socket}){
                                     className="add-more"
                                     onClick={fileClick}
                                 >
-                                    <i className="material-icons">add_to_photos</i>
+                                    <MaterialIcons name="add-to-photos" />
                                 </View>
                             </View>
                         </>
-
                     }
                     <TextInput
                         className="message-input-box"
-                        onChange={inputChange}
-                        onKeyDown={inputKeyDown}
-                        onKeyUp={inputKeyDown}
+                        onChangeText={setInputValue}
                         placeholder={"Type a message..."}
                         ref={inputRef}
-                        style={{height: `${chatHeight * 20}px`, overflowY: chatHeight >= 6 ? 'auto' : 'hidden'}}
+                        style={style.input}
                         value={inputValue}
                     />
-                    <button 
+                    <TouchableOpacity 
                         className="emoji-button"
                         onClick={(() => {dispatch(chatReducer({emoji: !emoji}))})}
                     >
-                        <span>
-                        <svg 
-                            style={{fill: chat_settings.color}}
-                            xmlns="http://www.w3.org/2000/svg" 
-                            height="22" 
-                            width="22"
-                        >
-                            <path d="M15.5 11Q16.15 11 16.575 10.575Q17 10.15 17 9.5Q17 8.85 16.575 8.425Q16.15 8 15.5 8Q14.85 8 14.425 8.425Q14 8.85 14 9.5Q14 10.15 14.425 10.575Q14.85 11 15.5 11ZM8.5 11Q9.15 11 9.575 10.575Q10 10.15 10 9.5Q10 8.85 9.575 8.425Q9.15 8 8.5 8Q7.85 8 7.425 8.425Q7 8.85 7 9.5Q7 10.15 7.425 10.575Q7.85 11 8.5 11ZM12 17.5Q13.775 17.5 15.137 16.525Q16.5 15.55 17.1 14H15.45Q14.925 14.9 14.025 15.45Q13.125 16 12 16Q10.875 16 9.975 15.45Q9.075 14.9 8.55 14H6.9Q7.5 15.55 8.863 16.525Q10.225 17.5 12 17.5ZM12 22Q9.925 22 8.1 21.212Q6.275 20.425 4.925 19.075Q3.575 17.725 2.788 15.9Q2 14.075 2 12Q2 9.925 2.788 8.1Q3.575 6.275 4.925 4.925Q6.275 3.575 8.1 2.787Q9.925 2 12 2Q14.075 2 15.9 2.787Q17.725 3.575 19.075 4.925Q20.425 6.275 21.212 8.1Q22 9.925 22 12Q22 14.075 21.212 15.9Q20.425 17.725 19.075 19.075Q17.725 20.425 15.9 21.212Q14.075 22 12 22Z"/>
-                        </svg>
-                        </span>
-                    </button>
+                        <MaterialCommunityIcons name="emoticon-happy" color={chat_settings.color} size={24}/>
+                    </TouchableOpacity>
                 </View>
                 {
-                    chat_settings.emoji ?
+                    isTyping &&
+                    <TouchableOpacity>
+                        <MaterialIcons name="send" color={chat_settings.color}/>
+                    </TouchableOpacity>
+                }
+                {
+                    (chat_settings.emoji && !isTyping) ?
                     <View 
                         className="chat-emoji"
                         onClick={((e) => {
@@ -485,7 +526,7 @@ export default function ChatBottom({inputRef, socket}){
                             }
                         })}
                     >
-                        {chat_settings.emoji}
+                        <Text style={{fontSize: 24}}>{chat_settings.emoji}</Text>
                     </View>
                     :
                     <View 

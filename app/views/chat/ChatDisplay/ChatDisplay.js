@@ -408,7 +408,7 @@ export default function ChatDisplay({ navigation }) {
                     chatDisplayWindow={chatDisplayWindow}
                 />
             </ScrollView>
-            
+            <ChatBottom />
             <ArrowBottom
                 chatDisplayWindow={chatDisplayWindow}
             />
