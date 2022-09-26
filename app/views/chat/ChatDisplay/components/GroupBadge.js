@@ -1,8 +1,10 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { chatReducer } from "../../../../src/redux/chat";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { globalStyles } from "../../../../src/styles/globalStyles";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function GroupBadge({ locale }){
     const dispatch = useDispatch();
@@ -28,12 +30,12 @@ export default function GroupBadge({ locale }){
                 var string = `${sendername} created this group`
                 
                 return(
-                    <View className="group-badge-wrapper">
-                        <View className="group-figure">
-                            <Image source={{uri: others[0].profile_picture ? `https://risala.codenoury.se/${others[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
-                            <Image source={{uri: others[1].profile_picture ? `https://risala.codenoury.se/${others[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                    <View style={style.wrapper} className="group-badge-wrapper">
+                        <View style={style.badgeImageWrapper}>
+                            <Image style={style.badgeImageOne} source={{uri: others[0].profile_picture ? `https://risala.codenoury.se/${others[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                            <Image style={style.badgeImageTwo} source={{uri: others[1].profile_picture ? `https://risala.codenoury.se/${others[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
                         </View>
-                        <Text style={{color: '#fff'}} className="group-name">
+                        <Text style={style.badgeHeader} className="group-name">
                             {
                                 !current.alias &&
                                 others.map((e,i, row) => {
@@ -47,36 +49,42 @@ export default function GroupBadge({ locale }){
                         </Text>
                         {
                             current.alias &&
-                            <Text style={{color: '#fff'}} className="group-name">{current.alias}</Text>
+                            <Text style={style.badgeHeader} className="group-name">{current.alias}</Text>
                         }
-                        <Text className="creator">{string}</Text>
-                        <View className="group-chat-settings">
-                            <View onClick={(() => {
+                        <Text style={style.creator}>{string}</Text>
+                        <View style={style.settingsWrapper}>
+                            <View style={style.settingsButton} onClick={(() => {
                                 dispatch(chatReducer({
                                     isChat_window: true,
                                     chat_window: { purpose: "add_member"},
                                 }))
                             })}>
-                                <MaterialIcons name="person-add"/>
-                                <Text>{locale === "en" ? "Add user" : "Lägg till"}</Text>
+                                <TouchableOpacity style={style.icon}>
+                                    <MaterialIcons name="person-add" color={'#fff'} size={26}/>
+                                </TouchableOpacity>
+                                <Text style={style.settingsText}>{locale === "en" ? "Add user" : "Lägg till"}</Text>
                             </View>
-                            <View onClick={(() => {
+                            <View style={style.settingsButton} onClick={(() => {
                                 dispatch(chatReducer({
                                     isChat_window: true,
                                     chat_window: { purpose: "change_name"},
                                 }))
                             })}>
-                                <MaterialIcons name="edit"/>
-                                <Text>{locale === "en" ? "Change name" : "Namn"}</Text>
+                                <TouchableOpacity style={style.icon}>
+                                    <MaterialIcons name="edit" color={'#fff'} size={26}/>
+                                </TouchableOpacity>
+                                <Text style={style.settingsText}>{locale === "en" ? "Change name" : "Namn"}</Text>
                             </View>
-                            <View onClick={(() => {
+                            <View style={style.settingsButton} onClick={(() => {
                                 dispatch(chatReducer({
                                     isChat_window: true,
                                     chat_window: { purpose: "view_members"},
                                 }))
                             })}>
-                                <MaterialIcons name="groups"/>
-                                <Text>{locale === "en" ? "Group members" : "Medlemmar"}</Text>
+                                <TouchableOpacity style={style.icon}>
+                                    <MaterialIcons name="groups" color={'#fff'} size={26}/>
+                                </TouchableOpacity>
+                                <Text style={style.settingsText}>{locale === "en" ? "Group members" : "Medlemmar"}</Text>
                             </View>
                         </View>
                     </View>
@@ -91,3 +99,63 @@ export default function GroupBadge({ locale }){
         return null
     }
 }
+
+const style = StyleSheet.create({
+    wrapper: {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 40
+    },
+    badgeImageWrapper: {
+        width: 80,
+        height: 80
+    },
+    badgeImageOne: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        top: 0,
+        right: 0
+    },
+    badgeImageTwo: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: '#000',
+        bottom: 0,
+        left: 0
+    },
+    badgeHeader: {
+        color: '#fff',
+        fontSize: 22,
+        fontWeight: '600'
+    },
+    creator: {
+        marginTop: 4,
+        color: globalStyles.colors.white_1
+    },
+    settingsWrapper: {
+        width: '100%',
+        marginTop: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly'
+    },
+    settingsButton: {
+        alignItems: 'center'
+    },
+    settingsText: {
+        color: '#fff'
+    },
+    icon: {
+        backgroundColor: globalStyles.colors.white_2,
+        padding: 6,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+    }
+})

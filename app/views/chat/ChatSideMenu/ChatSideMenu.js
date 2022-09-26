@@ -159,12 +159,12 @@ export default function ChatSideMenu({ navigation }){
             <View>
                 <View style={style.viewTop}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '90%', marginBottom: 10}}>
-                        <Pressable onPress={(() => { setUserSettings(!userSettings) })}>
+                        <TouchableOpacity onPress={(() => { setUserSettings(!userSettings) })}>
                             <Image 
                                 style={{width: 30, height: 30, borderRadius: 15}}
                                 source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
                             />
-                        </Pressable>
+                        </TouchableOpacity>
                         <Text style={{color: "#fff", fontSize: 26, fontWeight: '600'}}>Chats</Text>
                         <TouchableOpacity onPress={newMessageInit}>
                             <Entypo name="new-message" size={24} color="#fff" />

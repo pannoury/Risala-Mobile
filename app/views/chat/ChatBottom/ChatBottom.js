@@ -5,9 +5,12 @@ import { chatReducer, arrayEmpty, objectAdd } from "../../../src/redux/chat";
 import sendMessage from "./functions/sendMessage";
 import { SocketContext } from "../../../src/lib/Socket";
 import { MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker';
 
 import EmojiWindow          from "../EmojiWindow";
 import informationManager   from "../../../src/lib/informationManager";
+import { globalStyles } from "../../../src/styles/globalStyles";
+import CameraModule from "./functions/CameraModule";
 
 export default function ChatBottom({inputRef}){
     const [inputValue, setInputValue] = useState('');
@@ -17,8 +20,11 @@ export default function ChatBottom({inputRef}){
     const imageExtension = ['gif', 'png', 'jpeg', 'jpg', 'svg']
 
     const [chatHeight, setChatHeight] = useState(1)
+    const [isFocus, setFocus] = useState(false)
     const [initialDisplayHeight, setInitialDisplayHeight] = useState(0)
     const [isTyping, setIsTyping] = useState(false) // <-- This is whether YOU are typing or not
+    const [isCamera, setIsCamera] = useState(false)
+    const [image, setImage] = useState(null)
 
     const dispatch = useDispatch();
     const socket = useContext(SocketContext)
@@ -300,6 +306,22 @@ export default function ChatBottom({inputRef}){
         }))
     }
 
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+          setImage(result.uri);
+        }
+    };
+
     const style = StyleSheet.create({
         wrapper: {
             width: '100%',
@@ -323,7 +345,7 @@ export default function ChatBottom({inputRef}){
         messageBox: {
             flexDirection: 'row',
             alignItems: 'center',
-            width: isTyping ? '90%' : '54%',
+            width: (isTyping || isFocus) ? '90%' : '54%',
             backgroundColor: '#141414',
             paddingTop: 8,
             paddingBottom: 8,
@@ -336,7 +358,8 @@ export default function ChatBottom({inputRef}){
             height: `${chatHeight * 20}`, 
             overflowY: chatHeight >= 6 ? 'auto' : 'hidden',
             width: '100%',
-            color: '#fff'
+            color: '#fff',
+            paddingTop: 0
         }
     })
 
@@ -386,15 +409,17 @@ export default function ChatBottom({inputRef}){
                 className="message-box-wrapper"
             >
                 <View className="message-insert-options" style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={style.optionsStyle}>
+                    <TouchableOpacity 
+                        style={style.optionsStyle}
+                        onPress={() => { setIsCamera(true) }}
+                    >
                         <FontAwesome name="camera" color={chat_settings.color} size={24}/>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={style.optionsStyle}
                         className="attach-file"
-                        onClick={fileClick}
+                        onPress={pickImage}
                     >
-                        
                         <FontAwesome name="image" color={chat_settings.color} size={24}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={style.optionsStyle}>
@@ -492,6 +517,10 @@ export default function ChatBottom({inputRef}){
                         ref={inputRef}
                         style={style.input}
                         value={inputValue}
+                        keyboardAppearance={'default'}
+                        placeholderTextColor={globalStyles.colors.white_1}
+                        multiline={true}
+                        onSelectionChange={(e) => { console.log(e) }}
                     />
                     <TouchableOpacity 
                         className="emoji-button"
@@ -508,7 +537,7 @@ export default function ChatBottom({inputRef}){
                 }
                 {
                     (chat_settings.emoji && !isTyping) ?
-                    <View 
+                    <TouchableOpacity 
                         className="chat-emoji"
                         onClick={((e) => {
                             if(current){
@@ -527,7 +556,7 @@ export default function ChatBottom({inputRef}){
                         })}
                     >
                         <Text style={{fontSize: 24}}>{chat_settings.emoji}</Text>
-                    </View>
+                    </TouchableOpacity>
                     :
                     <View 
                         className="chat-emoji"
@@ -556,6 +585,10 @@ export default function ChatBottom({inputRef}){
                 <EmojiWindow 
                     emojiSelect={emojiSelect}
                 />
+            }
+            {
+                isCamera &&
+                <CameraModule />
             }
         </View>
     )

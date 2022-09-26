@@ -230,7 +230,6 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
         <>
             <View
                 id={value.message_id}
-                className={reply === true ? `recieved-message reply ${nextMatch ? 'NXTSM' : ''}` : nextMatch ? "recieved-message NXTSM" : "recieved-message"}
                 message_id={value.message_id}
                 key={value.message_id}
                 user_id={sender ? sender.id : null}
@@ -286,7 +285,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                                     var type = mediaObject.type.split('/')[0]
                                                     var style = null
                                                     
-                                                    if(aspectRatio > 1.7){ //16:9
+                                                    if(aspectRatio > 1){ //16:9
                                                         style = sixteenToNine
                                                     } else if(aspectRatio === 1){
                                                         style = oneToOne
@@ -299,11 +298,10 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                                     return(
                                                         <TouchableOpacity style={{marginLeft: 8}}>
                                                             <Image 
-                                                                //style={style ? style : null}
                                                                 key={e + 'reply'}
                                                                 onClick={(() => { fileClick(e) })}
                                                                 source={{uri: `https://risala.codenoury.se/${e.substring(3)}`}}
-                                                                style={style}
+                                                                style={style ? style : null}
                                                             />
                                                         </TouchableOpacity>
                                                     )
