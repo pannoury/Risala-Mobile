@@ -84,10 +84,10 @@ export default function ChatDisplay({ navigation }) {
         if(chat && COUNTER_DATA && current){
             setLoading(false)
             if(chat.length >= 100 && moreMessage === false){
-                setOffset(chatDisplayWindow.current.childElementCount)
+                setOffset(chat.length)
                 postRequest('chat/size', {id: current.id})
                 .then((response) => {
-                    if(chatDisplayWindow.current.childElementCount < response.count){
+                    if(chat.length < response.count){
                         setMoreMessage(true)
                     } else {
                         setMoreMessage(false)
@@ -108,10 +108,11 @@ export default function ChatDisplay({ navigation }) {
 
     useEffect(() => {
         if(moreMessage === true){
-            chatDisplayWindow.current.addEventListener('scroll', scrollDetect)
+            console.log(chatDisplayWindow)
+            chatDisplayWindow?.current.addEventListener('scroll', scrollDetect)
         } else {
             try {
-                chatDisplayWindow.current.removeEventListener('scroll', scrollDetect)
+                chatDisplayWindow?.current.removeEventListener('scroll', scrollDetect)
             } catch (e){
                 
             }

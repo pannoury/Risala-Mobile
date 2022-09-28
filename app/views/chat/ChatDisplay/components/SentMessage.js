@@ -117,9 +117,9 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
     }
 
     //Styled components for Aspect Ratios
-    const smallSize = Dimensions.get("screen").width * 0.2
-    const midSize = Dimensions.get("screen").width * 0.25
-    const largeSize = Dimensions.get("screen").width * 0.3621
+    const smallSize = Dimensions.get("window").width * 0.2
+    const midSize = Dimensions.get("window").width * 0.25
+    const largeSize = Dimensions.get("window").width * 0.3621
     const oneToOne = { width: midSize, height: midSize}
     const sixteenToNine = { width: largeSize, height: smallSize}
     const nineToSixteen = { width: smallSize, height: largeSize}
@@ -157,13 +157,14 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
 
     const style = StyleSheet.create({
         chatBubble: {
+            alignSelf: 'flex-end',
             backgroundColor: chat_settings.color,
             paddingTop: 8, paddingBottom: 8, paddingLeft: 12, paddingRight: 12,
             borderTopLeftRadius: chatBorderRadius           ? chatBorderRadius[0] : 20,
             borderTopRightRadius: chatBorderRadius          ? chatBorderRadius[1] : 20,
             borderBottomRightRadius: chatBorderRadius       ? chatBorderRadius[2] : 20,
             borderBottomLeftRadius: chatBorderRadius        ? chatBorderRadius[3] : 20,
-            maxWidth: Dimensions.get("screen").width * 0.6
+            maxWidth: Dimensions.get("window").width * 0.6
         },
         list: {
             width: '100%', 
@@ -171,6 +172,21 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
             alignItems: 'center', 
             justifyContent: 'space-between', 
             marginBottom: !nextMatch ? 10 : 2
+        },
+        replyWrapper: {
+            replyFrom: {
+                marginTop: 10,
+                flexDirection: 'row',
+                alignSelf: 'flex-end'
+            },
+            replyChatBubble: {
+                alignSelf: 'flex-end',
+                backgroundColor: globalStyles.colors.white_3,
+                paddingTop: 8, paddingBottom: 20, paddingLeft: 12, paddingRight: 12,
+                borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
+                maxWidth: Dimensions.get("window").width * 0.6,
+                marginBottom: -10
+            }
         }
     })
 
@@ -192,12 +208,12 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                     <View className="message-wrapper">
                         <View className="reply-wrapper">
                             <View 
-                                className="reply-from"
+                                style={style.replyWrapper.replyFrom}
                                 message_id={value.reply_to_message_id}
                                 onClick={(() => { scrollToReply(value.reply_to_message_id) })}
                             >
-                                <FontAwesome name="reply" color={"#fff"} size={24}/>
-                                <Text>{replied_text}</Text>
+                                <FontAwesome name="reply" color={globalStyles.colors.white_1} style={{marginRight: 10, marginBottom: 6}} size={18}/>
+                                <Text style={{color: globalStyles.colors.white_1}}>{replied_text}</Text>
                             </View>
                             {
                                 isMedia && value.reply_text &&
@@ -255,8 +271,8 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                             }
                             {
                                 !isMedia && value.reply_text && !fileReply &&
-                                <View className="reply-chat-bubble" style={style.chatBubble}>
-                                    <Text>{value.reply_text}</Text>
+                                <View className="reply-chat-bubble" style={style.replyWrapper.replyChatBubble}>
+                                    <Text style={{color: globalStyles.colors.white_1}}>{value.reply_text}</Text>
                                 </View>
                             }
                             {
@@ -297,9 +313,9 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                                 >
                                     {
                                         !url ?
-                                        <Text>{`${value.text}`}</Text>
+                                        <Text style={{color: '#fff'}}>{`${value.text}`}</Text>
                                         :
-                                        <Text href={value.text} target="_blank">{value.text}</Text>
+                                        <Text href={value.text} target="_blank" style={{color: '#fff'}}>{value.text}</Text>
                                     }
                                 </View>
                             } 

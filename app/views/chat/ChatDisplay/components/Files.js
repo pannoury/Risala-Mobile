@@ -14,12 +14,12 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
     const chat_settings = useSelector((state) => state.chatReducer.value.chat_settings)
 
     //Styled components for Aspect Ratios
-    const smallSize = Dimensions.get("screen").width * 0.2
-    const midSize = Dimensions.get("screen").width * 0.25
-    const largeSize = Dimensions.get("screen").width * 0.3621
-    const oneToOne = { width: midSize, height: midSize}
-    const sixteenToNine = { width: largeSize, height: smallSize}
-    const nineToSixteen = { width: smallSize, height: largeSize}
+    const smallSize = Dimensions.get("window").width * 0.2
+    const midSize = Dimensions.get("window").width * 0.25
+    const largeSize = Dimensions.get("window").width * 0.3621
+    const oneToOne = { width: midSize, height: midSize, borderRadius: 3}
+    const sixteenToNine = { width: largeSize, height: smallSize, borderRadius: 3}
+    const nineToSixteen = { width: smallSize, height: largeSize, borderRadius: 3}
 
     function fileClick(e){
         dispatch(chatReducer({

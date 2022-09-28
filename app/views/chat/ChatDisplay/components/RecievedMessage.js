@@ -175,9 +175,9 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
     }
 
     //Styled components for Aspect Ratios
-    const smallSize = Dimensions.get("screen").width * 0.2
-    const midSize = Dimensions.get("screen").width * 0.25
-    const largeSize = Dimensions.get("screen").width * 0.3621
+    const smallSize = Dimensions.get("window").width * 0.2
+    const midSize = Dimensions.get("window").width * 0.25
+    const largeSize = Dimensions.get("window").width * 0.3621
     const oneToOne = { width: midSize, height: midSize}
     const sixteenToNine = { width: largeSize, height: smallSize}
     const nineToSixteen = { width: smallSize, height: largeSize}
@@ -209,7 +209,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
             borderTopRightRadius: chatBorderRadius          ? chatBorderRadius[1] : 20,
             borderBottomRightRadius: chatBorderRadius       ? chatBorderRadius[2] : 20,
             borderBottomLeftRadius: chatBorderRadius        ? chatBorderRadius[3] : 20,
-            maxWidth: Dimensions.get("screen").width * 0.6,
+            maxWidth: Dimensions.get("window").width * 0.6,
             alignSelf: 'flex-start',
             marginLeft: !nextMatch ? 0 : 40
         },
@@ -222,7 +222,23 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
             width: 30, 
             height: 30, 
             borderRadius: 15, 
-            marginRight: 10
+            marginRight: 10,
+            alignSelf: 'flex-end'
+        },
+        replyWrapper: {
+            replyFrom: {
+                marginTop: 10,
+                flexDirection: 'row',
+                alignSelf: 'flex-start',
+            },
+            replyChatBubble: {
+                alignSelf: 'flex-start',
+                backgroundColor: globalStyles.colors.white_3,
+                paddingTop: 8, paddingBottom: 20, paddingLeft: 12, paddingRight: 12,
+                borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
+                maxWidth: Dimensions.get("window").width * 0.6,
+                marginBottom: -10
+            }
         }
     })
 
@@ -239,17 +255,17 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                 style={style.list}
             >
                 {
-                    (group && (!previousMatch && !nextMatch || previousMatch && !nextMatch)) &&
+                    (group && !nextMatch) &&
                     <Image 
                         style={style.counterProfilePicture}
-                        source={{uri: sender ? sender.profile_picture ? `https://risala.codenoury/${sender.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                        source={{uri: sender?.profile_picture ? `https://risala.codenoury.se/${sender.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
                     />
                 }
                 {
                     (!group && ((!previousMatch && !nextMatch) || previousMatch && !nextMatch)) &&
                     <Image 
                         style={style.counterProfilePicture}
-                        source={{uri: COUNTER_DATA[0].profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                        source={{uri: COUNTER_DATA[0]?.profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
                     />
                 }
                 {
@@ -261,10 +277,10 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                     className="reply-from"
                                     message_id={value.reply_to_message_id}
                                     onClick={(() => { scrollToReply(value.reply_to_message_id) })}
-                                    style={{flexDirection: 'row', marginBottom: 6}}
+                                    style={style.replyWrapper.replyFrom}
                                 >
-                                    <FontAwesome name="reply" color={globalStyles.colors.white_1} size={18}/>
-                                    <Text style={{color: globalStyles.colors.white_1, marginLeft: 10}}>{replied_text}</Text>
+                                    <FontAwesome name="reply" color={globalStyles.colors.white_1} size={18} style={{marginRight: 10, marginBottom: 6}} />
+                                    <Text style={{color: globalStyles.colors.white_1}}>{replied_text}</Text>
                                 </View>
                                 {
                                     isMedia && value.reply_text &&
@@ -349,8 +365,8 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                 }
                                 {
                                     !isMedia && value.reply_text && !fileReply &&
-                                    <View className="reply-chat-bubble" style={{}}>
-                                        <Text style={{color: '#fff'}}>{value.reply_text}</Text>
+                                    <View className="reply-chat-bubble" style={style.replyWrapper.replyChatBubble}>
+                                        <Text style={{color: globalStyles.colors.white_1}}>{value.reply_text}</Text>
                                     </View>
                                 }
                                 {
@@ -394,11 +410,15 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                     <>
                         {
                             userNickname ?
-                            <Text className="sender-name" style={{color: '#fff'}}>{userNickname}</Text>
+                            <Text className="sender-name" style={{color: '#fff', marginBottom: 4, marginLeft: 8}}>{userNickname}</Text>
                             :
-                            <Text className="sender-name" style={{color: '#fff'}}>{sender.firstname}</Text>
+                            <Text className="sender-name" style={{color: '#fff', marginBottom: 4, marginLeft: 8}}>{sender.firstname ? sender.firstname : 'Participant'}</Text>
                         }
                     </>
+                }
+                {
+                    (!sender && group && !previousMatch) &&
+                    <Text style={{color: '#fff', marginBottom: 4, marginLeft: nextMatch ? 48 : 8}}>Participant</Text>
                 }
                 <View className="message-wrapper">
                     {

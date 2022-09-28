@@ -3,6 +3,9 @@ import store from "../../redux/store";
 import { chatReducer } from "../../redux/chat";
 import { postRequest, errorManagement } from "../../../api/api";
 
+// React Native
+import * as Notifications from 'expo-notifications';
+
 function socketMessage(data){
     const state = store.getState().chatReducer.value
     const chat = state.chat
