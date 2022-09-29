@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { chatReducer } from "../../../../src/redux/chat";
@@ -6,6 +6,10 @@ import isUrl from 'is-url'
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { globalStyles } from "../../../../src/styles/globalStyles";
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+
+// Animation
+import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import { PanGestureHandler } from "react-native-gesture-handler";
 
 import Files                from "./Files";
 import removeEmojis         from "../functions/removeEmojis";
@@ -329,13 +333,41 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
     )
 
     function NotReply(){
+        const translateX = useSharedValue(0)
+
+        const panGestureEvent = useAnimatedGestureHandler({
+            onStart: (event, context) => {
+                context.translateX = translateX.value
+            },
+            onActive: (event, context) => {
+                if(translateX.value < -40 || translateX.value > 0){
+                    //translateX.value = -40
+                } else {
+                    translateX.value = event.translationX + context.translateX
+                }
+            },
+            onEnd: (event) => {
+                translateX.value = withTiming(0);
+            }
+        })
+
+        const animatedStyle = useAnimatedStyle(() => {
+            return {
+                transform: [
+                    {translateX: translateX.value}
+                ]
+            }
+        })
+
         return(
             <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
                 {
                     (only_emoji === "" && value.text !== "") &&
-                    <View className="message emoji">
-                        <Text style={{fontSize: 40}}>{value.text}</Text>
-                    </View>
+                    <PanGestureHandler onGestureEvent={panGestureEvent}>
+                        <Animated.View className="message emoji" style={animatedStyle}>
+                            <Text style={{fontSize: 40}}>{value.text}</Text>
+                        </Animated.View>
+                    </PanGestureHandler>
                 }
                 {
                     (file && filePath) &&
@@ -348,17 +380,19 @@ export default function SentMessage({index, value, optionSelect, timestamp, arra
                 }
                 {
                     (only_emoji !== "" && !file && !filePath) &&
-                    <View 
-                        className="message" 
-                        style={style.chatBubble}
-                    >
-                        {
-                            !url ?
-                            <Text style={{color: '#fff'}}>{`${value.text}`}</Text>
-                            :
-                            <Text href={value.text} style={{color: '#fff'}}>{value.text}</Text>
-                        }
-                    </View>
+                    <PanGestureHandler onGestureEvent={panGestureEvent}>
+                        <Animated.View 
+                            className="message" 
+                            style={[style.chatBubble, animatedStyle]}
+                        >
+                            {
+                                !url ?
+                                <Text style={{color: '#fff'}}>{`${value.text}`}</Text>
+                                :
+                                <Text href={value.text} style={{color: '#fff'}}>{value.text}</Text>
+                            }
+                        </Animated.View>
+                    </PanGestureHandler>
                 }
             </View>
         )

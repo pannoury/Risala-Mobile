@@ -1,12 +1,55 @@
-import React from "react"
-import { Modal, View, Image, Text, StyleSheet, Button, Pressable, TouchableOpacity } from "react-native"
+import React, { useEffect } from "react"
+import { Modal, View, Image, Text, StyleSheet, Button, Pressable, TouchableOpacity, Dimensions } from "react-native"
 import { useSelector, useDispatch } from "react-redux"
 import { globalStyles } from "../../../src/styles/globalStyles"
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { PanGestureHandler, NativeViewGestureHandler, State, TapGestureHandler } from 'react-native-gesture-handler';
+
+// Animation
+import Animated, { runOnJS, useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import { PanGestureHandler } from "react-native-gesture-handler";
 
 export default function UserModal({ userSettings, setUserSettings }){
     const USER_DATA = useSelector((state) => state.chatReducer.value.USER_DATA)
+
+    useEffect(() => {
+        translateY.value = !userSettings ? 0 : translateY.value
+    }, [userSettings])
+
+    // Animations
+    const translateY = useSharedValue(0)
+
+    const panGestureEvent = useAnimatedGestureHandler({
+        onStart: (event, context) => {
+            context.translateY = translateY.value
+        },
+        onActive: (event, context) => {
+            if(translateY.value < 0){
+                translateY.value = -2
+            } else {
+                translateY.value = event.translationY + context.translateY
+            }
+        },
+        onEnd: () => {
+            if(translateY.value > 20){
+                test();
+            } else {
+                translateY.value = withTiming(0);
+            }
+        },
+    })
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {translateY: translateY.value}
+            ]
+        }
+    })
+
+    function test(){
+        'worklet';
+        console.log('test')
+    }
 
     return(
         <Modal
@@ -14,7 +57,8 @@ export default function UserModal({ userSettings, setUserSettings }){
             visible={userSettings}
             transparent={true}
         >
-            <View style={style.view}>
+            <PanGestureHandler onGestureEvent={panGestureEvent}>
+            <Animated.View style={[style.view, animatedStyle]}>
                 <View style={style.line}/>
                 <Pressable 
                     style={style.button}
@@ -34,7 +78,8 @@ export default function UserModal({ userSettings, setUserSettings }){
                     <TouchableOpacity style={style.settingsList}><MaterialIcons color="#fff" size={22} name="settings"/><Text style={style.settingsText}>Settings</Text></TouchableOpacity>
                     <TouchableOpacity style={style.settingsList}><MaterialIcons color="#fff" size={22} name="logout"/><Text style={style.settingsText}>Log out</Text></TouchableOpacity>
                 </View>
-            </View>
+            </Animated.View>
+            </PanGestureHandler>
         </Modal>
     )
 }

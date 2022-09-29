@@ -32,6 +32,7 @@ export default function ChatDisplay({ navigation }) {
 
     const typingAudio = useRef()
     const inputRef = useRef()
+    const chatDisplayWindow = useRef(null);
 
     const [height, setHeight] = useState();
     const [offset, setOffset] = useState(0)
@@ -43,12 +44,6 @@ export default function ChatDisplay({ navigation }) {
     const [control, setControl] = useState(false)
     const [nickname, setNickname] = useState(undefined)
     const [counter, setCounter] = useState(undefined)
-
-    const chatDisplayWindow = useRef(null);
-
-    function conversationOptions(){
-
-    }
 
     useEffect(() => {
         setOffset(0)
@@ -107,25 +102,6 @@ export default function ChatDisplay({ navigation }) {
     }, [chat, moreMessage, COUNTER_DATA, current, control])
 
     useEffect(() => {
-        if(moreMessage === true){
-            console.log(chatDisplayWindow)
-            chatDisplayWindow?.current.addEventListener('scroll', scrollDetect)
-        } else {
-            try {
-                chatDisplayWindow?.current.removeEventListener('scroll', scrollDetect)
-            } catch (e){
-                
-            }
-        }
-
-        return() => {
-            if(moreMessage && chatDisplayWindow?.current){
-                chatDisplayWindow.current.removeEventListener('scroll', scrollDetect)
-            }
-        }
-    }, [moreMessage, current, chat])
-
-    useEffect(() => {
         if(reply.reply && newMessage.is_searching){
             dispatch(chatReducer({
                 reply: {
@@ -172,7 +148,9 @@ export default function ChatDisplay({ navigation }) {
     }, [current])
 
     function scrollDetect(e){
-        if(chatDisplayWindow?.scrollTop === 0 && moreMessage && chatDisplayWindow.current.childElementCount >= 100 && !loading){
+        console.log(e.nativeEvent.contentOffset.y)
+        var position = e.nativeEvent.contentOffset.y
+        if(position === 0 && moreMessage && chat.length >= 100 && !loading){
             setChatLoading(true)
             postRequest('chat/chat', {
                 chat_id: current.id,
@@ -188,7 +166,6 @@ export default function ChatDisplay({ navigation }) {
 
                 if(response.length < 100){
                     setMoreMessage(false)
-                    chatDisplayWindow.current.removeEventListener('scroll', scrollDetect)
                 }
             })
             .catch((err) => {
@@ -295,7 +272,8 @@ export default function ChatDisplay({ navigation }) {
                 ref={chatDisplayWindow}
                 current-id={current ? current.id : null}
                 style={{backgroundColor: '#000'}}
-                //onContentSizeChange={() => chatDisplayWindow.current.scrollToEnd({animated: true})}
+                onScroll={moreMessage ? scrollDetect : null}
+                onContentSizeChange={() => chatDisplayWindow.current.scrollToEnd({animated: false})}
             >
                 {
                     chatLoading &&
