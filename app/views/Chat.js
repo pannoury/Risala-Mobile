@@ -71,10 +71,11 @@ export default function Chat({ navigation, page, setPage }){
     // Check if user exists
     useEffect(() => {
 
-        if (getStorage('user')) {
+        if (!USER_DATA?.account_id) {
             getStorage('user')
             .then((response) => {
                 var response = JSON.parse(response).response
+                console.log(response)
                 dispatch(chatReducer({
                     USER_DATA: {
                         account_id: response.account_id,
@@ -85,27 +86,11 @@ export default function Chat({ navigation, page, setPage }){
                     }
                 }))
             })
-
-            //postRequest('accounts', {
-            //    account: user.id,
-            //    username: user.username
-            //})
-            //.then((response) =>{
-            //    setAccess(true)
-            //    getHistory();
-            //    dispatch(objectAdd({key: 'USER_DATA', value: response}))
-            //})
-            //.catch((err) => {
-            //  
-            //  setTimeout(() => {
-            //    router.push("/login/")
-            //  }, 3000)
-            //})
         } else {
-          
+          console.log(USER_DATA)
         }
 
-    }, [])
+    }, [USER_DATA])
 
     return(
         <NavigationContainer>

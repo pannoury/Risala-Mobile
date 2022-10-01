@@ -78,7 +78,7 @@ export default function ChatSideMenu({ navigation }){
                 getHistory();
             })
             .catch((err) => {
-    
+                console.log(err)
             })
         }
         
