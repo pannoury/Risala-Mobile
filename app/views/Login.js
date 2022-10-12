@@ -38,10 +38,10 @@ export default function Login({ page, setPage }){
             username: value.username
           })
           .then((response) => {
-            //navigation.navigate('Chat', { name: 'Chat' })
+            navigation.navigate('Chat', { name: 'Chat' })
           })
         }
-      }, [])
+    }, [])
 
     useEffect(() => {
         console.log(usernameInput)

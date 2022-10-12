@@ -27,15 +27,25 @@ export default function SignIn({}){
             password: passwordInput
         })
         .then((response) => {
+            console.log(response)
             if(response === "No match was found"){
                 setIsWrong(true)
             } else {
                 setIsWrong(false)
                 setStorage('user', JSON.stringify({response}))
+                dispatch(chatReducer({
+                    USER_DATA: {
+                        account_id: response.account_id,
+                        username: response.username,
+                        firstname: response.firstname,
+                        lastname: response.lastname,
+                        profile_picture: response.profile_picture
+                    }
+                }))
             }
         })
         .catch((err) => {
-            console.log(err)
+            console.error(err)
         })
     }
 
