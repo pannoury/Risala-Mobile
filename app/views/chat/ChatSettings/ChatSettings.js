@@ -171,8 +171,8 @@ export default function ChatSettings({ navigation }){
                         group ?
                         <>
                             <View style={style.groupHeader}>
-                                <Image style={style.groupImageOne} source={{uri: group[0].profile_picture ? `https://risala.codenoury.se/${group[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
-                                <Image style={style.groupImageTwo} source={{uri: group[1].profile_picture ? `https://risala.codenoury.se/${group[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                                <Image style={style.groupImageOne} source={{uri: group[0].profile_picture ? `https://risala.datablock.dev/${group[0].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}/>
+                                <Image style={style.groupImageTwo} source={{uri: group[1].profile_picture ? `https://risala.datablock.dev/${group[1].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}/>
                             </View>
                             <Text style={style.topText}>
                                 {
@@ -198,7 +198,7 @@ export default function ChatSettings({ navigation }){
                                 <>
                                     <Image 
                                         style={{width: 80, height: 80, borderRadius: 40}}
-                                        source={{uri: COUNTER_DATA ? COUNTER_DATA[0].profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png" }}
+                                        source={{uri: COUNTER_DATA ? COUNTER_DATA[0].profile_picture ? `https://risala.datablock.dev/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png" : "https://datablock.dev/assets/generic-profile-picture.png" }}
                                     />
                                     {
                                         nickname ?

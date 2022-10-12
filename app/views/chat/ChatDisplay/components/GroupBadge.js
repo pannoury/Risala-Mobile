@@ -32,8 +32,8 @@ export default function GroupBadge({ locale }){
                 return(
                     <View style={style.wrapper} className="group-badge-wrapper">
                         <View style={style.badgeImageWrapper}>
-                            <Image style={style.badgeImageOne} source={{uri: others[0].profile_picture ? `https://risala.codenoury.se/${others[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
-                            <Image style={style.badgeImageTwo} source={{uri: others[1].profile_picture ? `https://risala.codenoury.se/${others[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                            <Image style={style.badgeImageOne} source={{uri: others[0].profile_picture ? `https://risala.datablock.dev/${others[0].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}/>
+                            <Image style={style.badgeImageTwo} source={{uri: others[1].profile_picture ? `https://risala.datablock.dev/${others[1].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}/>
                         </View>
                         <Text style={style.badgeHeader} className="group-name">
                             {

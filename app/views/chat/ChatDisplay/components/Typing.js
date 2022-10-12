@@ -40,7 +40,7 @@ export default function Typing({ typingAudio, chatDisplayWindow }) {
 
     useEffect(() => {
         if(typing?.is_typing && match){
-           sound.loadAsync('https://risala.codenoury.se/assets/typing_sound.mp3')
+           sound.loadAsync('https://risala.datablock.dev/assets/typing_sound.mp3')
            sound.playAsync()
         } else {
             sound.unloadAsync()

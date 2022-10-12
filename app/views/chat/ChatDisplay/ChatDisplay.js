@@ -201,11 +201,11 @@ export default function ChatDisplay({ navigation }) {
                             <View style={{height: 40, width: 40}}>
                                 <Image
                                     style={{width: 30, height: 30, borderRadius: 15, position: 'absolute', top: 0, left: 10}} 
-                                    source={{uri: group[0].profile_picture ? `https://risala.codenoury.se/${group[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                                    source={{uri: group[0].profile_picture ? `https://risala.datablock.dev/${group[0].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                                 />
                                 <Image
                                     style={{width: 30, height: 30, borderRadius: 15, position: 'absolute', bottom: 0, borderWidth: 1, borderColor: '#000'}} 
-                                    source={{uri: group[1].profile_picture ? `https://risala.codenoury.se/${group[1].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                                    source={{uri: group[1].profile_picture ? `https://risala.datablock.dev/${group[1].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                                 />
                             </View>
                             <Text style={style.chatTopName}>
@@ -234,7 +234,7 @@ export default function ChatDisplay({ navigation }) {
                         >
                             <Image 
                                 style={{width: 30, height: 30, borderRadius: 15}}
-                                source={{uri: COUNTER_DATA ? COUNTER_DATA[0].profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png" : "https://codenoury.se/assets/generic-profile-picture.png" }}
+                                source={{uri: COUNTER_DATA ? COUNTER_DATA[0].profile_picture ? `https://risala.datablock.dev/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png" : "https://datablock.dev/assets/generic-profile-picture.png" }}
                             />
                             {
                                 nickname ?

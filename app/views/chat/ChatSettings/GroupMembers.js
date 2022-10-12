@@ -73,7 +73,7 @@ export default function GroupMembers({group, admin, setAdmin, options, setOption
                                 key={index}
                             >
                                 <View className="user-info-wrapper">
-                                    <Image soure={{uri: value.profile_picture ? `https://risala.codenoury.se/${value.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                                    <Image soure={{uri: value.profile_picture ? `https://risala.datablock.dev/${value.profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}/>
                                     <View>
                                         <Text>{value.firstname + ' ' + value.lastname}</Text>
                                         {
@@ -104,7 +104,7 @@ export default function GroupMembers({group, admin, setAdmin, options, setOption
                 }
                 <View className="group-member">
                     <View className="user-info-wrapper">
-                        <Image source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}/>
+                        <Image source={{uri: USER_DATA.profile_picture ? `https://risala.datablock.dev/${USER_DATA.profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}/>
                         <View>
                             <Text>{USER_DATA.firstname + ' ' + USER_DATA.lastname}</Text>
                             {

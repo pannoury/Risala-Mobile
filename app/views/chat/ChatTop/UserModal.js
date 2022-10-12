@@ -69,7 +69,7 @@ export default function UserModal({ userSettings, setUserSettings }){
                 <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 40}}>
                     <Image 
                         style={{width: 80, height: 80, borderRadius: 40, marginBottom: 10}}
-                        source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                        source={{uri: USER_DATA.profile_picture ? `https://risala.datablock.dev/${USER_DATA.profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                     />
                     <Text style={{color: '#fff', fontSize: 22, fontWeight: '800'}}>{`${USER_DATA.firstname} ${USER_DATA.lastname}`}</Text>
                 </View>

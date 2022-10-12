@@ -60,7 +60,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path + index + 'not-reply'} 
                                             style={imageStyle}
                                             onClick={(() => { fileClick(value.path) })}
-                                            source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
+                                            source={{uri: `https://risala.datablock.dev/${value.path.substring(3)}`}}
                                         />
                                     </TouchableOpacity>
                                 )
@@ -72,7 +72,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path + index + 'not-reply'} 
                                             style={imageStyle}
                                             onClick={(() => { fileClick(value.path) })}
-                                            source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
+                                            source={{uri: `https://risala.datablock.dev/${value.path.substring(3)}`}}
                                         />
                                     </TouchableOpacity>
                                 )
@@ -86,7 +86,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                 <>
                                     <View 
                                         className="file-wrapper" 
-                                        href={`https://risala.codenoury.se/${value.path.substring(3)}`} 
+                                        href={`https://risala.datablock.dev/${value.path.substring(3)}`} 
                                         target="_blank" rel="noopener noreferrer" 
                                         title={value.name}
                                         key={value.path + index + 'not-reply'} 
@@ -129,7 +129,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                             <TouchableOpacity>
                                 <View
                                     className="file-wrapper" 
-                                    href={`https://risala.codenoury.se/${fileObject.path.substring(3)}`} 
+                                    href={`https://risala.datablock.dev/${fileObject.path.substring(3)}`} 
                                     target="_blank" rel="noopener noreferrer" 
                                     title={fileObject.path}
                                     key={fileObject.path + 'file-reply'}
@@ -178,7 +178,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path} 
                                             onClick={(() => { fileClick(value.path) })}
                                             style={imageStyle}
-                                            source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}
+                                            source={{uri: `https://risala.datablock.dev/${value.path.substring(3)}`}}
                                         />
                                     </TouchableOpacity>
                                 )
@@ -190,7 +190,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                             key={value.path} 
                                             onClick={(() => { fileClick(value.path) })}
                                             style={imageStyle}
-                                            source={{uri: `https://risa.codenoury.se/${value.path.substring(3)}`}}
+                                            source={{uri: `https://risa.datablock.dev/${value.path.substring(3)}`}}
                                         />
                                     </TouchableOpacity>
                                 )
@@ -202,7 +202,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                                 <TouchableOpacity>
                                     <View 
                                         className="file-wrapper" 
-                                        href={`https://risala.codenoury.se/${value.path.substring(3)}`} 
+                                        href={`https://risala.datablock.dev/${value.path.substring(3)}`} 
                                         target="_blank" rel="noopener noreferrer" 
                                         title={value.name}
                                         key={value.path}
@@ -234,7 +234,7 @@ export default function Files({ value, filePath, recieved, fileReply, reply }){
                             <TouchableOpacity>
                                 <View 
                                     className="file-wrapper" 
-                                    href={`https://risala.codenoury.se/${fileObject.path.substring(3)}`} 
+                                    href={`https://risala.datablock.dev/${fileObject.path.substring(3)}`} 
                                     target="_blank" rel="noopener noreferrer" 
                                     title={fileObject.path}
                                     key={fileObject.path}

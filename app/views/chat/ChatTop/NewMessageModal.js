@@ -104,7 +104,7 @@ export default function NewMessageModal(){
             >
                 <Image
                     style={{width: 40, height: 40, borderRadius: 20, marginRight: 10}}
-                    source={{uri: item.profile_picture ? `https://risala.codenoury.se/${item.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                    source={{uri: item.profile_picture ? `https://risala.datablock.dev/${item.profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                 />
                 <Text style={{color: '#fff', fontSize: 20}}>
                     {item.firstname} {item.lastname}

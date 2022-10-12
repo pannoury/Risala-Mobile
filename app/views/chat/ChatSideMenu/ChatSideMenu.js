@@ -162,7 +162,7 @@ export default function ChatSideMenu({ navigation }){
                         <TouchableOpacity onPress={(() => { setUserSettings(!userSettings) })}>
                             <Image 
                                 style={{width: 30, height: 30, borderRadius: 15}}
-                                source={{uri: USER_DATA.profile_picture ? `https://risala.codenoury.se/${USER_DATA.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                                source={{uri: USER_DATA.profile_picture ? `https://risala.datablock.dev/${USER_DATA.profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                             />
                         </TouchableOpacity>
                         <Text style={{color: "#fff", fontSize: 26, fontWeight: '600'}}>Chats</Text>

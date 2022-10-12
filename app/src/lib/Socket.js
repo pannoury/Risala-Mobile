@@ -1,7 +1,7 @@
 import React, { createContext } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-var url = "https://risala.codenoury.se"
+var url = "https://risala.datablock.dev"
 
 const socket = io.connect(url)
 const SocketContext = createContext(socket)

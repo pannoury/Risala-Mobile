@@ -38,8 +38,8 @@ router.post('/', (req, res) => {
                                     <tr>
                                         <td style="width: 40px;"></td>
                                         <td>
-                                            <a href="https://codenoury.se" style="display: block; width: 262px;">
-                                                <img src="https://codenoury.se/assets/logo-long-white.png" style="height: 30px;" alt="logo">
+                                            <a href="https://datablock.dev" style="display: block; width: 262px;">
+                                                <img src="https://datablock.dev/assets/logo-long-white.png" style="height: 30px;" alt="logo">
                                             </a>
                                         </td>
                                     </tr>
@@ -75,8 +75,8 @@ router.post('/', (req, res) => {
                                         <tr>
                                             <td style="width: 40px;"></td>
                                             <td>
-                                                <a href="https://codenoury.se" style="display: block; width: 200px;">
-                                                    <img src="https://codenoury.se/assets/logo-long-white.png" style="height: 20px;" alt="logo"/>
+                                                <a href="https://datablock.dev" style="display: block; width: 200px;">
+                                                    <img src="https://datablock.dev/assets/logo-long-white.png" style="height: 20px;" alt="logo"/>
                                                 </a>
                                             </td>
                                         </tr>
@@ -90,9 +90,9 @@ router.post('/', (req, res) => {
                                         <tr>
                                             <td style="width: 40px;"></td>
                                             <td style="color: #ffffffb3;">
-                                                <a href="https://codenoury.se/projects" style="color: #ffffffb3; font-weight: bold; text-decoration: none;">Previous Projects</a>
+                                                <a href="https://datablock.dev/projects" style="color: #ffffffb3; font-weight: bold; text-decoration: none;">Previous Projects</a>
                                                 <span>|</span>
-                                                <a href="https://codenoury.se/about" style="color: #ffffffb3; font-weight: bold; text-decoration: none;">About</a>
+                                                <a href="https://datablock.dev/about" style="color: #ffffffb3; font-weight: bold; text-decoration: none;">About</a>
                                                 <span>|</span>
                                                 <a style="color: #ffffffb3; font-weight: bold; text-decoration: none;">Docs</a>
                                             </td>
@@ -109,13 +109,13 @@ router.post('/', (req, res) => {
                                             <td style="width: 40px;"></td>
                                             <td>
                                                 <a style="font-size: 0; margin-right: 10px;" href="https://www.linkedin.com/in/patrick-tannoury/">
-                                                    <img src="https://codenoury.se/assets/linkedin-logo-white.png" style="width: 30px; height: 30px;">
+                                                    <img src="https://datablock.dev/assets/linkedin-logo-white.png" style="width: 30px; height: 30px;">
                                                 </a>
                                                 <a style="font-size: 0; margin-right: 10px;" href="https://github.com/pannoury">
-                                                    <img src="https://codenoury.se/assets/github-logo-white.png" style="width: 30px; height: 30px;">
+                                                    <img src="https://datablock.dev/assets/github-logo-white.png" style="width: 30px; height: 30px;">
                                                 </a>
                                                 <a style="font-size: 0;" href="https://www.upwork.com/freelancers/~015d0ecb241f77468a">
-                                                    <img src="https://codenoury.se/assets/upwork-logo-white.png" style="width: 30px; height: 30px; object-fit: contain;">
+                                                    <img src="https://datablock.dev/assets/upwork-logo-white.png" style="width: 30px; height: 30px; object-fit: contain;">
                                                 </a>
                                             </td>
                                         </tr>
@@ -129,7 +129,7 @@ router.post('/', (req, res) => {
                                         <tr style="height: 20px;"></tr>
                                         <tr>
                                             <td style="width: 40px; border: none; padding: 0; margin: 0;"></td>
-                                            <td><p style="color: #ffffffb3; font-size: 12px;">©2022 Codenoury, Stockholm, Sweden | <a href="https://codenoury.se" style="color: #ffffffb3; font-weight: bold;">https://codenoury.se</a></p></td>
+                                            <td><p style="color: #ffffffb3; font-size: 12px;">©2022 Codenoury, Stockholm, Sweden | <a href="https://datablock.dev" style="color: #ffffffb3; font-weight: bold;">https://datablock.dev</a></p></td>
                                         </tr>
                                         <tr style="height: 20px;"></tr>
                                     </tbody>
@@ -149,7 +149,7 @@ router.post('/', (req, res) => {
                     port: 587,
                     secure: false,
                     auth: {
-                        user: "noreply@codenoury.se",
+                        user: "noreply@datablock.dev",
                         pass: process.env.MAIL_PASS
                     },
                     tls: {
@@ -158,7 +158,7 @@ router.post('/', (req, res) => {
                 })
 
                 let mailOptions = {
-                    from: "Codenoury <noreply@codenoury.se>",
+                    from: "Codenoury <noreply@datablock.dev>",
                     to: `${dataObj.email}`,
                     subject: "Your inquiery has been recieved",
                     html: mail_Ouput

@@ -6,7 +6,7 @@ import informationManager from "../src/lib/informationManager";
 
 export function postRequest(URL, payload, headers){
     return new Promise((resolve, reject) => {
-        let url = `https://risala.codenoury.se/api/${URL}`
+        let url = `https://risala.datablock.dev/api/${URL}`
 
         axios.post(url, payload, headers)
         .then((response) => {
@@ -24,7 +24,7 @@ export function postRequest(URL, payload, headers){
 
 export function getRequest(URL){
     return new Promise((resolve, reject) => {
-        let url = `https://risala.codenoury.se/api/${URL}`
+        let url = `https://risala.datablock.dev/api/${URL}`
 
         axios(URL)
         .then((response) => {
@@ -45,7 +45,7 @@ export function errorManagement(payload){
     const MESSAGES = state.MESSAGES
 
     return new Promise((resolve, reject) => {
-        let url = `https://risala.codenoury.se/api/error`
+        let url = `https://risala.datablock.dev/api/error`
     
         try {
             axios.post(url, {

@@ -76,7 +76,7 @@
                                             style={{height: `${widthStyle}px`}}
                                             onClick={(() => { fileClick(value.path) })}
                                         >
-                                            <Image source={{uri: `https://risala.codenoury.se/${value.path.substring(3)}`}}/>
+                                            <Image source={{uri: `https://risala.datablock.dev/${value.path.substring(3)}`}}/>
                                         </View>
                                     )
                                 }
@@ -110,7 +110,7 @@
                                     <TouchableOpacity 
                                         className="file-row"
                                         key={value.path}
-                                        href={`https://risala.codenoury.se/${value.path.substring(3)}`} 
+                                        href={`https://risala.datablock.dev/${value.path.substring(3)}`} 
                                         target="_blank" 
                                         rel="noopener noreferrer" 
                                     >

@@ -66,7 +66,7 @@ export default function Conversations({chats, conversationSelect}){
                                 members.length === 1 &&
                                 <Image 
                                     style={{width: 40, height: 40, borderRadius: 20, marginRight: 10}}
-                                    source={{uri: members[0].profile_picture ? `https://risala.codenoury.se/${members[0].profile_picture.substring(3)}` : 'https://codenoury.se/assets/generic-profile-picture.png'}}
+                                    source={{uri: members[0].profile_picture ? `https://risala.datablock.dev/${members[0].profile_picture.substring(3)}` : 'https://datablock.dev/assets/generic-profile-picture.png'}}
                                 />
                             }
                             {
@@ -74,11 +74,11 @@ export default function Conversations({chats, conversationSelect}){
                                 <View style={{width: 40, height: 40, position: "relative", marginRight: 10}}>
                                     <Image 
                                         style={{width: 30, height: 30, position: "absolute", borderRadius: 15, right: 0, top: 0}}
-                                        source={{uri: members[0].profile_picture ? `https://risala.codenoury.se/${members[0].profile_picture.substring(3)}` : 'https://codenoury.se/assets/generic-profile-picture.png'}}
+                                        source={{uri: members[0].profile_picture ? `https://risala.datablock.dev/${members[0].profile_picture.substring(3)}` : 'https://datablock.dev/assets/generic-profile-picture.png'}}
                                     />
                                     <Image 
                                         style={{width: 30, height: 30, position: 'absolute', borderRadius: 15, bottom: 0, left: 0, zIndex: 10, borderWidth: 1, borderColor: '#000'}}
-                                        source={{uri: members[1].profile_picture ? `https://risala.codenoury.se/${members[1].profile_picture.substring(3)}` : 'https://codenoury.se/assets/generic-profile-picture.png'}}
+                                        source={{uri: members[1].profile_picture ? `https://risala.datablock.dev/${members[1].profile_picture.substring(3)}` : 'https://datablock.dev/assets/generic-profile-picture.png'}}
                                     />
                                 </View>
                             }

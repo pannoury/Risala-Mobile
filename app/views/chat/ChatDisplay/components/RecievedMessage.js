@@ -262,14 +262,14 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                     (group && !nextMatch) &&
                     <Image 
                         style={style.counterProfilePicture}
-                        source={{uri: sender?.profile_picture ? `https://risala.codenoury.se/${sender.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                        source={{uri: sender?.profile_picture ? `https://risala.datablock.dev/${sender.profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                     />
                 }
                 {
                     (!group && ((!previousMatch && !nextMatch) || previousMatch && !nextMatch)) &&
                     <Image 
                         style={style.counterProfilePicture}
-                        source={{uri: COUNTER_DATA[0]?.profile_picture ? `https://risala.codenoury.se/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                        source={{uri: COUNTER_DATA[0]?.profile_picture ? `https://risala.datablock.dev/${COUNTER_DATA[0].profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                     />
                 }
                 {
@@ -320,7 +320,7 @@ export default function RecievedMessage({index, value, optionSelect, timestamp, 
                                                             <Image 
                                                                 key={e + 'reply'}
                                                                 onClick={(() => { fileClick(e) })}
-                                                                source={{uri: `https://risala.codenoury.se/${e.substring(3)}`}}
+                                                                source={{uri: `https://risala.datablock.dev/${e.substring(3)}`}}
                                                                 style={style ? style : null}
                                                             />
                                                         </TouchableOpacity>

@@ -143,7 +143,7 @@ export default function CallEvent({ value, index, locale, array, USER_DATA, curr
                 (!nextMatch && !isSender) &&
                 <Image 
                     style={{width: 30, height: 30, borderRadius: 15, marginRight: 10}}
-                    source={{uri: counter.profile_picture ? `https://risala.codenoury.se/${counter.profile_picture.substring(3)}` : "https://codenoury.se/assets/generic-profile-picture.png"}}
+                    source={{uri: counter.profile_picture ? `https://risala.datablock.dev/${counter.profile_picture.substring(3)}` : "https://datablock.dev/assets/generic-profile-picture.png"}}
                 />
             }
             <View 
